@@ -1,5 +1,10 @@
 # C++ objects and libs
 
+*.exe
+*.ilk
+*.pdb
+*.obj
+
 *.slo
 *.lo
 *.o
