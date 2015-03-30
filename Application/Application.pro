@@ -1,4 +1,6 @@
 
+QT += gui widgets core
+
 OPENCV_PATH = $$PWD/../../opencv
 OPENCV_VERSION = 2410
 
@@ -19,4 +21,11 @@ OPENCV_VERSION = 2410
 }
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    mainwindow.cpp
+
+FORMS += \
+    mainwindow.ui
+
+HEADERS += \
+    mainwindow.h
