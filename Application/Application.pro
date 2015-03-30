@@ -22,10 +22,13 @@ OPENCV_VERSION = 2410
 
 SOURCES += \
         main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    databasecreator.cpp
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    databasecreator.ui
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    databasecreator.h
