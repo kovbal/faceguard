@@ -21,6 +21,8 @@ class FacePreprocessor final
     cv::Mat result;
 
     std::shared_ptr<cv::CascadeClassifier> faceClassifier;
+
+    unsigned int GetMinSize() const;
 public:
     FacePreprocessor(std::shared_ptr<cv::CascadeClassifier> faceClassifier, const cv::Mat& input) throw(std::invalid_argument);
     cv::Mat Preprocess() throw (NoFaceFoundException);

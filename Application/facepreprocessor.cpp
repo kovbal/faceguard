@@ -19,6 +19,12 @@ FacePreprocessor::FacePreprocessor(std::shared_ptr<cv::CascadeClassifier> faceCl
         throw std::invalid_argument("faceClassifier");
 }
 
+unsigned int FacePreprocessor::GetMinSize() const
+{
+    int minDim = std::min(input.rows, input.cols);
+    return static_cast<unsigned int>(minDim / 5.0);
+}
+
 Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 {
     cvtColor(input, result, CV_BGR2GRAY);
@@ -28,7 +34,8 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
     result = normalized;
 
     std::vector<Rect> faces;
-    faceClassifier->detectMultiScale(result, faces, 1.1, 3, 0, Size(96, 96));
+    Size minSize(GetMinSize(), GetMinSize());
+    faceClassifier->detectMultiScale(result, faces, 1.1, 3, 0, minSize);
 
     if (!faces.empty())
     {
