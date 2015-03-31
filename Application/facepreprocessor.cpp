@@ -24,7 +24,7 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
     result = normalized;
 
     std::vector<Rect> faces;
-    faceClassifier->detectMultiScale(result, faces);
+    faceClassifier->detectMultiScale(result, faces, 1.1, 3, 0, Size(96, 96));
 
     if (!faces.empty())
     {
