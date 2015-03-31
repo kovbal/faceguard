@@ -26,9 +26,11 @@ DESTDIR = bin
     LIBS += opencv_core$${OPENCV_VERSION}.lib
     LIBS += opencv_highgui$${OPENCV_VERSION}.lib
     LIBS += opencv_imgproc$${OPENCV_VERSION}.lib
+    LIBS += opencv_objdetect$${OPENCV_VERSION}.lib
 
     package.path = $$DESTDIR
     package.files = opencv_core$${OPENCV_VERSION}.dll opencv_highgui$${OPENCV_VERSION}.dll opencv_imgproc$${OPENCV_VERSION}.dll
+    package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml
 
     INSTALLS += package
 }
@@ -37,6 +39,7 @@ DESTDIR = bin
     LIBS += -lopencv_core
     LIBS += -lopencv_highgui
     LIBS += -lopencv_imgproc
+    LIBS += -lopencv_objdetect
 }
 
 SOURCES += \
