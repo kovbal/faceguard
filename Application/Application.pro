@@ -1,20 +1,37 @@
+TARGET = faceguard
+
+CONFIG += stl rtti warn_on
 
 QT += gui widgets core
 
-OPENCV_PATH = $$PWD/../../opencv
-OPENCV_VERSION = 2410
+isEmpty(OPENCV_PATH) {
+    OPENCV_PATH = $$PWD/../../opencv
+}
+isEmpty(OPENCV_VERSION) {
+    OPENCV_VERSION = 2410
+}
+
+DESTDIR = bin
 
 *-msvc* {
     INCLUDEPATH += $${OPENCV_PATH}/build/include/
 
-    QMAKE_LIBDIR += $${OPENCV_PATH}/build/x86/vc12/lib
+    OPENCV_ARCH_DIR=x86
+    contains(QMAKE_TARGET.arch, x86_64):OPENCV_ARCH_DIR=x64
+
+    QMAKE_LIBDIR += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/lib
 
     LIBS += opencv_core$${OPENCV_VERSION}.lib
     LIBS += opencv_highgui$${OPENCV_VERSION}.lib
     LIBS += opencv_imgproc$${OPENCV_VERSION}.lib
+
+    package.path = $$DESTDIR
+    package.files = opencv_core$${OPENCV_VERSION}.dll opencv_highgui$${OPENCV_VERSION}.dll opencv_imgproc$${OPENCV_VERSION}.dll
+
+    INSTALLS += package
 }
 
-*g++* {
+*-g++* {
     LIBS += -lopencv_core
     LIBS += -lopencv_highgui
     LIBS += -lopencv_imgproc
@@ -32,3 +49,7 @@ FORMS += \
 HEADERS += \
     mainwindow.h \
     databasecreator.h
+
+target.path = $$DESTDIR
+
+INSTALLS += target
