@@ -8,11 +8,15 @@
 
 using namespace cv;
 
-FacePreprocessor::FacePreprocessor(std::shared_ptr<cv::CascadeClassifier> faceClassifier, const Mat& input)
+FacePreprocessor::FacePreprocessor(std::shared_ptr<cv::CascadeClassifier> faceClassifier, const Mat& input)  throw(std::invalid_argument)
     : input(input),
       result(Mat(input.rows, input.cols, CV_8UC1)),
       faceClassifier(faceClassifier)
 {
+    if (faceClassifier.get() == nullptr)
+        throw std::invalid_argument("faceClassifier");
+    else if (faceClassifier->empty())
+        throw std::invalid_argument("faceClassifier");
 }
 
 Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)

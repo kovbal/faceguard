@@ -22,7 +22,7 @@ class FacePreprocessor final
 
     std::shared_ptr<cv::CascadeClassifier> faceClassifier;
 public:
-    FacePreprocessor(std::shared_ptr<cv::CascadeClassifier> faceClassifier, const cv::Mat& input);
+    FacePreprocessor(std::shared_ptr<cv::CascadeClassifier> faceClassifier, const cv::Mat& input) throw(std::invalid_argument);
     cv::Mat Preprocess() throw (NoFaceFoundException);
 };
 
