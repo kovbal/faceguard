@@ -27,7 +27,10 @@ unsigned int FacePreprocessor::GetMinSize() const
 
 Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 {
-    cvtColor(input, result, CV_BGR2GRAY);
+    if(input.type() == CV_8UC3)
+        cvtColor(input, result, CV_BGR2GRAY);
+    else
+        result = input;
     Mat normalized(result.rows, result.cols, CV_8UC1);
     equalizeHist(result, normalized);
 
