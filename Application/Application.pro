@@ -14,6 +14,8 @@ isEmpty(OPENCV_VERSION) {
 DESTDIR = bin
 
 *-msvc* {
+    QMAKE_CXXFLAGS += /wd4290
+
     INCLUDEPATH += $${OPENCV_PATH}/build/include/
 
     OPENCV_ARCH_DIR=x86
@@ -40,7 +42,8 @@ DESTDIR = bin
 SOURCES += \
         main.cpp \
     mainwindow.cpp \
-    databasecreator.cpp
+    databasecreator.cpp \
+    facepreprocessor.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -48,7 +51,8 @@ FORMS += \
 
 HEADERS += \
     mainwindow.h \
-    databasecreator.h
+    databasecreator.h \
+    facepreprocessor.h
 
 target.path = $$DESTDIR
 
