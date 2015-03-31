@@ -1,4 +1,4 @@
-FaceGuard   {#mainpage}
+FaceGuard 
 =======================
 
 This repository contains our coursework for the biometric identification course on the University of Pannonia.
