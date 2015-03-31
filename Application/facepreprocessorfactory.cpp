@@ -6,14 +6,17 @@
 
 
 FacePreprocessorFactory::FacePreprocessorFactory()
-    : faceClassifier(new cv::CascadeClassifier())
 {
+    classifiers.face = std::make_shared<cv::CascadeClassifier>();
+    classifiers.eye = std::make_shared<cv::CascadeClassifier>();
     const QString pathToFaceClassifier = QCoreApplication::applicationDirPath() + QDir::separator() + "haarcascade_frontalface_default.xml";
-    faceClassifier->load(pathToFaceClassifier.toStdString());
+    const QString pathToEyeClassifier = QCoreApplication::applicationDirPath() + QDir::separator() + "haarcascade_eye.xml";
+    classifiers.face->load(pathToFaceClassifier.toStdString());
+    classifiers.eye->load(pathToEyeClassifier.toStdString());
 }
 
 FacePreprocessor FacePreprocessorFactory::GetPreprocessor(const cv::Mat& image)
 {
-    FacePreprocessor toRet(faceClassifier, image);
+    FacePreprocessor toRet(classifiers, image);
     return toRet;
 }

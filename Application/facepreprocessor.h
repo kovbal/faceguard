@@ -15,16 +15,30 @@ public:
 
 #include <memory>
 
+struct FaceClassifiers
+{
+    std::shared_ptr<cv::CascadeClassifier> face;
+    std::shared_ptr<cv::CascadeClassifier> eye;
+};
+
 class FacePreprocessor final
 {
+    static const double MAX_ROTATE_ANGLE;
     const cv::Mat& input;
+    cv::Mat normalized;
     cv::Mat result;
+    cv::Rect face;
 
-    std::shared_ptr<cv::CascadeClassifier> faceClassifier;
+    FaceClassifiers classifiers;
 
     unsigned int GetMinSize() const;
-public:
-    FacePreprocessor(std::shared_ptr<cv::CascadeClassifier> faceClassifier, const cv::Mat& input) throw(std::invalid_argument);
+
+    double GetRotation(cv::Rect left, cv::Rect right);
+    void RotateFace();
+
+    static cv::Rect LargestRect(const std::vector<cv::Rect>& rects);
+ public:
+    FacePreprocessor(FaceClassifiers classifiers, const cv::Mat& input) throw(std::invalid_argument);
     cv::Mat Preprocess() throw (NoFaceFoundException);
 };
 

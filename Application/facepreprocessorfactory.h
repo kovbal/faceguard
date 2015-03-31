@@ -10,7 +10,7 @@
 
 class FacePreprocessorFactory final
 {
-    std::shared_ptr<cv::CascadeClassifier> faceClassifier;
+    FaceClassifiers classifiers;
 public:
     FacePreprocessorFactory();
 
