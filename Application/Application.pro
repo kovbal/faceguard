@@ -46,7 +46,8 @@ SOURCES += \
         main.cpp \
     mainwindow.cpp \
     databasecreator.cpp \
-    facepreprocessor.cpp
+    facepreprocessor.cpp \
+    facepreprocessorfactory.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -55,7 +56,8 @@ FORMS += \
 HEADERS += \
     mainwindow.h \
     databasecreator.h \
-    facepreprocessor.h
+    facepreprocessor.h \
+    facepreprocessorfactory.h
 
 target.path = $$DESTDIR
 

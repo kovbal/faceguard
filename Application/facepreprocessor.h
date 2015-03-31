@@ -13,14 +13,16 @@ public:
 #include <opencv2/core/core.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
 
+#include <memory>
+
 class FacePreprocessor final
 {
     const cv::Mat& input;
     cv::Mat result;
 
-    cv::CascadeClassifier faceClassifier;
+    std::shared_ptr<cv::CascadeClassifier> faceClassifier;
 public:
-    FacePreprocessor(const cv::Mat& input);
+    FacePreprocessor(std::shared_ptr<cv::CascadeClassifier> faceClassifier, const cv::Mat& input);
     cv::Mat Preprocess() throw (NoFaceFoundException);
 };
 
