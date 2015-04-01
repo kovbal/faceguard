@@ -80,7 +80,7 @@ void FacePreprocessor::RotateFace()
     Point2f pt(size/2.0f + face.x, size/2.0f + face.y);
     Mat r = getRotationMatrix2D(pt, angle, 1.0);
 
-    warpAffine(normalized, result, r, Size(fullSize, fullSize));
+    warpAffine(normalized, result, r, Size(fullSize, fullSize), CV_INTER_LANCZOS4);
 
     result = result(face);
 }
