@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <limits>
+#include <cstdint>
 
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -66,7 +67,36 @@ void FacePreprocessor::RotateFace()
         return;
     gotEyes = true;
 
-    std::sort(eyes.begin(), eyes.end(), [](const Rect& a, const Rect& b){ return a.area() > b.area(); });
+    if(eyes.size() > 2)
+    {
+        // finding the pair with lowest angle
+        std::vector<std::pair<uint16_t, uint16_t>> helper(eyes.size() * eyes.size());
+        auto helperI = helper.begin();
+        for(auto i = eyes.begin(); i != eyes.end(); i++)
+        {
+            for(auto j = eyes.begin(); j != eyes.end(); j++)
+            {
+                *helperI = std::make_pair(std::distance(eyes.begin(), i), std::distance(eyes.begin(), j));
+            }
+        }
+
+        std::sort(helper.begin(), helper.end(), [&eyes](const std::pair<uint16_t, uint16_t>& a, const std::pair<uint16_t, uint16_t>& b)
+        {
+            double angleA = std::abs(GetRotation(eyes[a.first], eyes[a.second]));
+            double angleB = std::abs(GetRotation(eyes[b.first], eyes[b.second]));
+            if (angleA == 0.0)
+                return false;
+            else if (angleB == 0.0)
+                return true;
+            else
+                return angleA < angleB;
+        });
+
+        assert(helper.front().first != helper.front().second);
+
+        std::swap(eyes[0], eyes[helper.front().first]);
+        std::swap(eyes[1], eyes[helper.front().second]);
+    }
 
     std::sort(eyes.begin(), eyes.begin() + 2, [](const Rect& a, const Rect& b) { return a.x < b.x; });
 

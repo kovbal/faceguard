@@ -35,7 +35,7 @@ class FacePreprocessor final
 
     unsigned int GetMinSize() const;
 
-    double GetRotation(cv::Rect left, cv::Rect right);
+    static double GetRotation(cv::Rect left, cv::Rect right);
     void RotateFace();
     void ScaleFace();
 
