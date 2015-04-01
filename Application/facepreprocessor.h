@@ -28,7 +28,7 @@ class FacePreprocessor final
     cv::Mat normalized;
     cv::Mat rotated;
     cv::Mat result;
-    cv::Rect face;
+    cv::Rect face = cv::Rect(0, 0, 0, 0);
     bool gotEyes = false;
 
     FaceClassifiers classifiers;
@@ -43,6 +43,7 @@ class FacePreprocessor final
  public:
     FacePreprocessor(FaceClassifiers classifiers, const cv::Mat& input) throw(std::invalid_argument);
     cv::Mat Preprocess() throw (NoFaceFoundException);
+    double GetAccuracy() const;
 };
 
 #endif // FACEPREPROCESSOR_H

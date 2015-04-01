@@ -107,6 +107,16 @@ void FacePreprocessor::ScaleFace()
     resize(result, result, Size(512, 512), 0.0, 0.0, CV_INTER_LANCZOS4);
 }
 
+double FacePreprocessor::GetAccuracy() const
+{
+    double accuracy = 0.0;
+    if(face.width > 0 && face.height > 0)
+        accuracy += 0.5;
+    if(gotEyes)
+        accuracy += 0.5;
+    return accuracy;
+}
+
 Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 {
     if(input.type() == CV_8UC3)
