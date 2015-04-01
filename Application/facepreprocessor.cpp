@@ -60,8 +60,10 @@ void FacePreprocessor::RotateFace()
 {
     int maxSize = static_cast<int>(std::ceil(std::max(result.rows, result.cols) / 6.0));
     int minSize = std::max(static_cast<int>(std::floor(std::min(result.rows, result.cols) / 20.0)), 5);
+    Mat tmp;
+    equalizeHist(result, tmp);
     std::vector<Rect> eyes;
-    classifiers.eye->detectMultiScale(result, eyes, 1.1, 3, 0, Size(minSize, minSize), Size(maxSize, maxSize));
+    classifiers.eye->detectMultiScale(tmp, eyes, 1.1, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
     if(eyes.size() < 2)
         return;
 
@@ -95,7 +97,7 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 
     std::vector<Rect> faces;
     Size minSize(GetMinSize(), GetMinSize());
-    classifiers.face->detectMultiScale(result, faces, 1.1, 3, 0, minSize);
+    classifiers.face->detectMultiScale(result, faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, minSize);
 
     if (!faces.empty())
     {
