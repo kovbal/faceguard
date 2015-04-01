@@ -60,12 +60,11 @@ void FacePreprocessor::RotateFace()
 {
     int maxSize = static_cast<int>(std::ceil(std::max(result.rows, result.cols) / 6.0));
     int minSize = std::max(static_cast<int>(std::floor(std::min(result.rows, result.cols) / 20.0)), 5);
-    Mat tmp;
-    equalizeHist(result, tmp);
     std::vector<Rect> eyes;
-    classifiers.eye->detectMultiScale(tmp, eyes, 1.1, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
+    classifiers.eye->detectMultiScale(result, eyes, 1.1, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
     if(eyes.size() < 2)
         return;
+    gotEyes = true;
 
     std::sort(eyes.begin(), eyes.end(), [](const Rect& a, const Rect& b){ return a.area() > b.area(); });
 
@@ -80,9 +79,32 @@ void FacePreprocessor::RotateFace()
     Point2f pt(size/2.0f + face.x, size/2.0f + face.y);
     Mat r = getRotationMatrix2D(pt, angle, 1.0);
 
-    warpAffine(normalized, result, r, Size(fullSize, fullSize), CV_INTER_LANCZOS4);
+    warpAffine(normalized, rotated, r, Size(fullSize, fullSize), CV_INTER_LANCZOS4);
 
-    result = result(face);
+    result = rotated(face);
+}
+
+void FacePreprocessor::ScaleFace()
+{
+    Rect aspected = face;
+    if(face.width < face.height)
+    {
+        aspected.width = face.height;
+    }
+    else
+    {
+        aspected.height = face.width;
+    }
+
+    Mat scaled = result.clone();
+
+    copyMakeBorder(scaled, scaled, 0, aspected.height, 0, aspected.width, BORDER_REPLICATE);
+
+    aspected.x = 0;
+    aspected.y = 0;
+
+    result = scaled(aspected);
+    resize(result, result, Size(512, 512), 0.0, 0.0, CV_INTER_LANCZOS4);
 }
 
 Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
@@ -111,6 +133,8 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
     }
 
     RotateFace();
+
+    ScaleFace();
 
     return result;
 }

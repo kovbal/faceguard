@@ -26,8 +26,10 @@ class FacePreprocessor final
     static const double MAX_ROTATE_ANGLE;
     const cv::Mat& input;
     cv::Mat normalized;
+    cv::Mat rotated;
     cv::Mat result;
     cv::Rect face;
+    bool gotEyes = false;
 
     FaceClassifiers classifiers;
 
@@ -35,6 +37,7 @@ class FacePreprocessor final
 
     double GetRotation(cv::Rect left, cv::Rect right);
     void RotateFace();
+    void ScaleFace();
 
     static cv::Rect LargestRect(const std::vector<cv::Rect>& rects);
  public:
