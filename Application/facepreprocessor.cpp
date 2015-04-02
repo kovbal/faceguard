@@ -156,6 +156,24 @@ std::vector<Rect> FacePreprocessor::GetEyes()
     }
     gotEyes = true;
 
+    for(uint8_t i = 0; i < eyes.size(); i++)
+    {
+        for(uint8_t j = 0; j < eyes.size(); j++)
+        {
+            if (i != j)
+            {
+                Rect intersection = eyes[i] & eyes[j];
+                if (intersection.area() > 0)
+                {
+                    eyes.erase(eyes.begin() + j);
+                    if (i > j)
+                        i--;
+                    j--;
+                }
+            }
+        }
+    }
+
     if(eyes.size() > 2)
     {
         // finding the pair with lowest angle
