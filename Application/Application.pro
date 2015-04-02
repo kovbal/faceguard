@@ -31,6 +31,10 @@ DESTDIR = bin
     package.path = $$DESTDIR
     package.files = opencv_core$${OPENCV_VERSION}.dll opencv_highgui$${OPENCV_VERSION}.dll opencv_imgproc$${OPENCV_VERSION}.dll opencv_objdetect$${OPENCV_VERSION}.dll
     package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml
+    package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_eye.xml
+    package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_mcs_eyepair_small.xml
+    package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_mcs_lefteye.xml
+    package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_mcs_righteye.xml
 
     INSTALLS += package
 }

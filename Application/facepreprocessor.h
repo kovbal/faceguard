@@ -19,6 +19,9 @@ struct FaceClassifiers
 {
     std::shared_ptr<cv::CascadeClassifier> face;
     std::shared_ptr<cv::CascadeClassifier> eye;
+    std::shared_ptr<cv::CascadeClassifier> eyePair;
+    std::shared_ptr<cv::CascadeClassifier> eyeLeft;
+    std::shared_ptr<cv::CascadeClassifier> eyeRight;
 };
 
 class FacePreprocessor final
@@ -36,6 +39,10 @@ class FacePreprocessor final
     unsigned int GetMinSize() const;
 
     static double GetRotation(cv::Rect left, cv::Rect right);
+
+    std::vector<cv::Rect> GetEyes();
+    std::vector<cv::Rect> GetEyesAlternateMethod();
+
     void RotateFace();
     void ScaleFace();
 
