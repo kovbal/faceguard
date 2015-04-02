@@ -18,3 +18,10 @@ Example values:
 
  - `OPENCV_PATH=../../opencv`
  - `OPENCV_VERSION=2411`
+
+After compilation, the following files must be placed in the executable's directory:
+- `haarcascade_frontalface_default.xml`
+- `haarcascade_eye.xml`
+- `haarcascade_mcs_eyepair_small.xml`
+- `haarcascade_mcs_lefteye.xml`
+- `haarcascade_mcs_righteye.xml`
