@@ -230,14 +230,33 @@ void FacePreprocessor::RotateFace()
     if (std::abs(angle) < std::numeric_limits<double>::epsilon() * 3 || std::abs(angle) > MAX_ROTATE_ANGLE)
         return;
 
-    int size = std::max(result.cols, result.rows);
-    int fullSize = std::max(normalized.cols, normalized.rows);
-    Point2f pt(size/2.0f + face.x, size/2.0f + face.y);
-    Mat r = getRotationMatrix2D(pt, angle, 1.0);
+    Point2f ptOnFullFrame(face.width / 2.0f + face.x, face.height / 2.0f + face.y);
+    //Mat r = getRotationMatrix2D(ptOnFullFrame, angle, 1.0);
+    RotatedRect rr(ptOnFullFrame, Size2f(face.width, face.height), angle);
+    Rect boundingBox = rr.boundingRect();
+    // create border
+    {
+        int top = -std::min(0, boundingBox.y);
+        int bottom = std::max(0, std::max(0, boundingBox.y) + boundingBox.height - normalized.rows);
+        int left = -std::min(0, boundingBox.x);
+        int right = std::max(0, std::max(0, boundingBox.x) + boundingBox.width - normalized.cols);
+        qDebug () << top << bottom << left << right;
+        copyMakeBorder(normalized, normalized, top, bottom, left, right, BORDER_REPLICATE);
+        boundingBox.x += left;
+        boundingBox.y += right;
+    }
+    //copyMakeBorder(normalized, normalized, boundingBox.height, boundingBox.height, boundingBox.width, boundingBox.width, BORDER_REPLICATE);
 
-    warpAffine(normalized, rotated, r, Size(fullSize, fullSize), CV_INTER_LANCZOS4);
+    //warpAffine(normalized, rotated, r, Size(fullSize, fullSize), CV_INTER_LANCZOS4);
+    rotated = normalized(boundingBox);
 
-    result = rotated(face);
+    Mat rotationMatrix = getRotationMatrix2D(Point2f(boundingBox.width / 2.0f, boundingBox.height / 2.0f), angle, 1.0);
+    warpAffine(rotated, rotated, rotationMatrix, boundingBox.size(), CV_INTER_LANCZOS4);
+
+    Rect faceTmp = face;
+    faceTmp.x = (boundingBox.width - face.width) / 2;
+    faceTmp.y = (boundingBox.height - face.height) / 2;
+    result = rotated(faceTmp);
 }
 
 void FacePreprocessor::ScaleFace()
