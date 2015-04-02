@@ -26,6 +26,18 @@ FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input
         throw std::invalid_argument("eye classifier");
     else if (classifiers.eye->empty())
         throw std::invalid_argument("eye classifier");
+    else if (classifiers.eyePair.get() == nullptr)
+        throw std::invalid_argument("eyepair classifier");
+    else if (classifiers.eyePair->empty())
+        throw std::invalid_argument("eyepair classifier");
+    else if (classifiers.eyeLeft.get() == nullptr)
+        throw std::invalid_argument("left eye classifier");
+    else if (classifiers.eyeLeft->empty())
+        throw std::invalid_argument("left eye classifier");
+    else if (classifiers.eyeRight.get() == nullptr)
+        throw std::invalid_argument("right eye classifier");
+    else if (classifiers.eyeRight->empty())
+        throw std::invalid_argument("right eye classifier");
 }
 
 unsigned int FacePreprocessor::GetMinSize() const
