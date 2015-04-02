@@ -62,7 +62,7 @@ Rect FacePreprocessor::LargestRect(const std::vector<Rect>& rects)
     return largest;
 }
 
-const double FacePreprocessor::MAX_ROTATE_ANGLE = 20.0;
+const double FacePreprocessor::MAX_ROTATE_ANGLE = 25.0;
 
 double FacePreprocessor::GetRotation(cv::Rect left, cv::Rect right)
 {
@@ -124,7 +124,7 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
 
 std::vector<Rect> FacePreprocessor::GetEyes()
 {
-    const Rect upperHalfOfFace(0, static_cast<int>(face.height * 0.2), face.width, static_cast<int>(face.height / 2.2));
+    const Rect upperHalfOfFace(face.width / 12, face.height / 5, face.width - (face.width / 6), static_cast<int>(face.height / 2.2));
     const int maxSize = static_cast<int>(std::ceil(std::max(upperHalfOfFace.width, upperHalfOfFace.height) / 5.0));
     const int minSize = std::max(static_cast<int>(std::floor(std::min(upperHalfOfFace.width, upperHalfOfFace.height) / 20.0)), 3);
     std::vector<Rect> eyes;
@@ -149,20 +149,14 @@ std::vector<Rect> FacePreprocessor::GetEyes()
         }
         else
         {
-            eye.y += upperHalfOfFace.y;
+            eye.x += upperHalfOfFace.x;
             eye.y += upperHalfOfFace.y;
         }
         if (MARK_FOUND_FEATURES)
             rectangle(result, eye, 1);
     }
-    if(eyes.size() < 2)
-    {
-        qDebug() << "only" << eyes.size() << "eyes were found";
-        eyes.clear();
-        return eyes;
-    }
-    gotEyes = true;
 
+    // removing intersecting objects
     for(uint8_t i = 0; i < eyes.size(); i++)
     {
         for(uint8_t j = 0; j < eyes.size(); j++)
@@ -180,6 +174,14 @@ std::vector<Rect> FacePreprocessor::GetEyes()
             }
         }
     }
+
+    if(eyes.size() < 2)
+    {
+        qDebug() << "only" << eyes.size() << "eyes were found";
+        eyes.clear();
+        return eyes;
+    }
+    gotEyes = true;
 
     if(eyes.size() > 2)
     {
@@ -312,16 +314,6 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
     }
 
     RotateFace();
-
-    static uint64_t eyesFoundCntr = 0;
-    static uint64_t totalRunCntr = 0;
-
-    totalRunCntr++;
-
-    if(!AreEyesFound())
-        qDebug() << "no eyes were found on the face -- this is odd :(" << ++eyesFoundCntr << "/" << totalRunCntr;
-    else
-        qDebug() << "is rotated? " << !rotated.empty() << (totalRunCntr - eyesFoundCntr) << "/" << totalRunCntr;
 
     ScaleFace();
 
