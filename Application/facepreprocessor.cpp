@@ -7,6 +7,8 @@
 
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include <QDebug>
+
 static const double PI = std::atan(1.0) * 4;
 
 using namespace cv;
@@ -46,17 +48,12 @@ Rect FacePreprocessor::LargestRect(const std::vector<Rect>& rects)
 
 const double FacePreprocessor::MAX_ROTATE_ANGLE = 20.0;
 
-#include <QDebug>
-
 double FacePreprocessor::GetRotation(cv::Rect left, cv::Rect right)
 {
     Point direction;
     direction.x = right.x - left.x;
     direction.y = right.y - left.y;
     double angle = std::atan2(direction.y, direction.x) * 180.0 / PI;
-    qDebug () << angle;
-    if (std::abs(angle) > MAX_ROTATE_ANGLE)
-        angle = 0.0;
     return angle;
 }
 
@@ -64,6 +61,7 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
 {
     static std::vector<Rect> empty;
     std::vector<Rect> eyes;
+    eyes.reserve(2);
     classifiers.eyePair->detectMultiScale(result, eyes, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT);
     if(eyes.empty())
         return empty;
@@ -156,12 +154,7 @@ std::vector<Rect> FacePreprocessor::GetEyes()
         {
             double angleA = std::abs(GetRotation(eyes[a.first], eyes[a.second]));
             double angleB = std::abs(GetRotation(eyes[b.first], eyes[b.second]));
-            if (angleA == 0.0)
-                return false;
-            else if (angleB == 0.0)
-                return true;
-            else
-                return angleA < angleB;
+            return angleA < angleB;
         });
 
         assert(helper.front().first != helper.front().second);
@@ -185,7 +178,7 @@ void FacePreprocessor::RotateFace()
 
     double angle = GetRotation(eyes[0], eyes[1]);
     qDebug() << "rotation angle: " << angle;
-    if (std::abs(angle) < std::numeric_limits<double>::epsilon() * 3)
+    if (std::abs(angle) < std::numeric_limits<double>::epsilon() * 3 || std::abs(angle) > MAX_ROTATE_ANGLE)
         return;
 
     int size = std::max(result.cols, result.rows);
