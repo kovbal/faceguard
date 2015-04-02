@@ -243,7 +243,7 @@ void FacePreprocessor::RotateFace()
         qDebug () << top << bottom << left << right;
         copyMakeBorder(normalized, normalized, top, bottom, left, right, BORDER_REPLICATE);
         boundingBox.x += left;
-        boundingBox.y += right;
+        boundingBox.y += top;
     }
     //copyMakeBorder(normalized, normalized, boundingBox.height, boundingBox.height, boundingBox.width, boundingBox.width, BORDER_REPLICATE);
 
