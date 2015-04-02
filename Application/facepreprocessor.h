@@ -14,6 +14,7 @@ public:
 #include <opencv2/objdetect/objdetect.hpp>
 
 #include <memory>
+#include <vector>
 
 struct FaceClassifiers
 {
@@ -50,7 +51,11 @@ class FacePreprocessor final
  public:
     FacePreprocessor(FaceClassifiers classifiers, const cv::Mat& input) throw(std::invalid_argument);
     cv::Mat Preprocess() throw (NoFaceFoundException);
+
     double GetAccuracy() const;
+    bool IsFaceFound() const;
+    bool AreEyesFound() const;
+    bool IsRotated() const;
 };
 
 #endif // FACEPREPROCESSOR_H

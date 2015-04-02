@@ -40,6 +40,8 @@ FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input
         throw std::invalid_argument("right eye classifier");
     else if (classifiers.eyeRight->empty())
         throw std::invalid_argument("right eye classifier");
+    else if (input.empty())
+        throw std::invalid_argument("input");
 }
 
 unsigned int FacePreprocessor::GetMinSize() const
@@ -130,7 +132,7 @@ std::vector<Rect> FacePreprocessor::GetEyes()
     //classifiers.eyePair->detectMultiScale(result(upperHalfOfFace), eyePairR, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT);
     if(eyePairR.empty())
     {
-        classifiers.eye->detectMultiScale(result(upperHalfOfFace), eyes, 1.1, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
+        classifiers.eye->detectMultiScale(result(upperHalfOfFace), eyes, 1.05, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
     }
     else
     {
@@ -252,14 +254,29 @@ void FacePreprocessor::ScaleFace()
     resize(result, result, Size(512, 512), 0.0, 0.0, CV_INTER_LANCZOS4);
 }
 
+bool FacePreprocessor::IsFaceFound() const
+{
+    return face.width > 0 && face.height > 0;
+}
+
+bool FacePreprocessor::AreEyesFound() const
+{
+    return gotEyes;
+}
+
+bool FacePreprocessor::IsRotated() const
+{
+    return !rotated.empty();
+}
+
 double FacePreprocessor::GetAccuracy() const
 {
     double accuracy = 0.0;
-    if(face.width > 0 && face.height > 0)
+    if(IsFaceFound())
         accuracy += 0.5;
-    if(gotEyes)
+    if(AreEyesFound())
         accuracy += 0.25;
-    if(!rotated.empty())
+    if(IsRotated())
         accuracy += 0.25;
     return accuracy;
 }
@@ -296,7 +313,7 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 
     totalRunCntr++;
 
-    if(!gotEyes)
+    if(!AreEyesFound())
         qDebug() << "no eyes were found on the face -- this is odd :(" << ++eyesFoundCntr << "/" << totalRunCntr;
     else
         qDebug() << "is rotated? " << !rotated.empty() << (totalRunCntr - eyesFoundCntr) << "/" << totalRunCntr;
