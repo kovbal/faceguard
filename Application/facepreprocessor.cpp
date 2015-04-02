@@ -122,9 +122,9 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
 
 std::vector<Rect> FacePreprocessor::GetEyes()
 {
-    int maxSize = static_cast<int>(std::ceil(std::max(result.rows, result.cols) / 6.0));
-    int minSize = std::max(static_cast<int>(std::floor(std::min(result.rows, result.cols) / 20.0)), 5);
-    Rect upperHalfOfFace(0, 0, face.width, static_cast<int>(face.height / 1.8));
+    const Rect upperHalfOfFace(0, 0, face.width, static_cast<int>(face.height / 1.8));
+    const int maxSize = static_cast<int>(std::ceil(std::max(upperHalfOfFace.width, upperHalfOfFace.height) / 5.0));
+    const int minSize = std::max(static_cast<int>(std::floor(std::min(upperHalfOfFace.width, upperHalfOfFace.height) / 20.0)), 3);
     std::vector<Rect> eyes;
     std::vector<Rect> eyePairR;
     //classifiers.eyePair->detectMultiScale(result(upperHalfOfFace), eyePairR, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT);
