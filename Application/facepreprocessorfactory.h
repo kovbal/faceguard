@@ -1,10 +1,7 @@
 #ifndef FACEPREPROCESSORFACTORY_H
 #define FACEPREPROCESSORFACTORY_H
 
-#include <memory>
-
 #include <opencv2/core/core.hpp>
-#include <opencv2/objdetect/objdetect.hpp>
 
 #include "facepreprocessor.h"
 
