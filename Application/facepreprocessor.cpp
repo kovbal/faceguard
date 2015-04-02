@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <limits>
 #include <cstdint>
+#include <cmath>
 
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -224,6 +225,7 @@ void FacePreprocessor::RotateFace()
     }
 
     double angle = GetRotation(eyes[0], eyes[1]);
+    angle = std::round(angle * 10.0) / 10.0;
     qDebug() << "rotation angle: " << angle;
     if (std::abs(angle) < std::numeric_limits<double>::epsilon() * 3 || std::abs(angle) > MAX_ROTATE_ANGLE)
         return;
