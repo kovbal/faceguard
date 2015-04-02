@@ -289,15 +289,15 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 
     RotateFace();
 
-    static uint64_t cntr = 0;
-    static uint64_t cntr2 = 0;
+    static uint64_t eyesFoundCntr = 0;
+    static uint64_t totalRunCntr = 0;
 
-    cntr2++;
+    totalRunCntr++;
 
     if(!gotEyes)
-        qDebug() << "no eyes were found on the face -- this is odd :(" << ++cntr << "/" << cntr2;
+        qDebug() << "no eyes were found on the face -- this is odd :(" << ++eyesFoundCntr << "/" << totalRunCntr;
     else
-        qDebug() << "is rotated? " << !rotated.empty() << (cntr2 - cntr) << "/" << cntr2;
+        qDebug() << "is rotated? " << !rotated.empty() << (totalRunCntr - eyesFoundCntr) << "/" << totalRunCntr;
 
     ScaleFace();
 
