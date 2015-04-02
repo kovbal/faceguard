@@ -258,7 +258,9 @@ double FacePreprocessor::GetAccuracy() const
     if(face.width > 0 && face.height > 0)
         accuracy += 0.5;
     if(gotEyes)
-        accuracy += 0.5;
+        accuracy += 0.25;
+    if(!rotated.empty())
+        accuracy += 0.25;
     return accuracy;
 }
 
