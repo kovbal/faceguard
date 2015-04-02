@@ -13,6 +13,8 @@ static const double PI = std::atan(1.0) * 4;
 
 using namespace cv;
 
+static const bool MARK_FOUND_FEATURES = false;
+
 FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input)  throw(std::invalid_argument)
     : input(input),
       result(Mat(input.rows, input.cols, CV_8UC1)),
@@ -78,7 +80,8 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
     if(eyes.empty())
         return empty;
     qDebug() << "eye pair was found";
-    rectangle(result, eyes.front(), 1);
+    if (MARK_FOUND_FEATURES)
+        rectangle(result, eyes.front(), 1);
 
     std::vector<Rect> lefts;
     std::vector<Rect> rights;
@@ -105,8 +108,11 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
     lefts.front().y += eyes.front().y;
     rights.front().x += eyes.front().x;
     rights.front().y += eyes.front().y;
-    rectangle(result, lefts.front(), 1);
-    rectangle(result, rights.front(), 1);
+    if (MARK_FOUND_FEATURES)
+    {
+        rectangle(result, lefts.front(), 1);
+        rectangle(result, rights.front(), 1);
+    }
 
     eyes.clear();
     eyes.push_back(lefts.front());
@@ -129,7 +135,8 @@ std::vector<Rect> FacePreprocessor::GetEyes()
     else
     {
         classifiers.eye->detectMultiScale(result(eyePairR.front()), eyes, 1.1, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
-        rectangle(result, eyePairR.front(), 255);
+        if (MARK_FOUND_FEATURES)
+            rectangle(result, eyePairR.front(), 255);
     }
     for (auto eye : eyes)
     {
@@ -138,7 +145,8 @@ std::vector<Rect> FacePreprocessor::GetEyes()
             eye.x += eyePairR.front().x;
             eye.y += eyePairR.front().y;
         }
-        rectangle(result, eye, 1);
+        if (MARK_FOUND_FEATURES)
+            rectangle(result, eye, 1);
     }
     if(eyes.size() < 2)
     {
