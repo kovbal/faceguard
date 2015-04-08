@@ -22,23 +22,23 @@ FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input
       classifiers(classifiers)
 {
     if (classifiers.face.get() == nullptr)
-        throw std::invalid_argument("face classifier");
+        throw std::invalid_argument("face classifier nullptr");
     else if (classifiers.face->empty())
         throw std::invalid_argument("face classifier");
     else if (classifiers.eye.get() == nullptr)
-        throw std::invalid_argument("eye classifier");
+        throw std::invalid_argument("eye classifier nullptr");
     else if (classifiers.eye->empty())
         throw std::invalid_argument("eye classifier");
     else if (classifiers.eyePair.get() == nullptr)
-        throw std::invalid_argument("eyepair classifier");
+        throw std::invalid_argument("eyepair classifier nullptr");
     else if (classifiers.eyePair->empty())
         throw std::invalid_argument("eyepair classifier");
     else if (classifiers.eyeLeft.get() == nullptr)
-        throw std::invalid_argument("left eye classifier");
+        throw std::invalid_argument("left eye classifier nullptr");
     else if (classifiers.eyeLeft->empty())
         throw std::invalid_argument("left eye classifier");
     else if (classifiers.eyeRight.get() == nullptr)
-        throw std::invalid_argument("right eye classifier");
+        throw std::invalid_argument("right eye classifier nullptr");
     else if (classifiers.eyeRight->empty())
         throw std::invalid_argument("right eye classifier");
     else if (input.empty())

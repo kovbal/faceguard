@@ -23,31 +23,31 @@ DESTDIR = bin
 
     QMAKE_LIBDIR += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/lib
 
-    release: {
-        LIBS += opencv_core$${OPENCV_VERSION}.lib
-        LIBS += opencv_highgui$${OPENCV_VERSION}.lib
-        LIBS += opencv_imgproc$${OPENCV_VERSION}.lib
-        LIBS += opencv_objdetect$${OPENCV_VERSION}.lib
-    }
-    debug: {
+    Debug {
         LIBS += opencv_core$${OPENCV_VERSION}d.lib
         LIBS += opencv_highgui$${OPENCV_VERSION}d.lib
         LIBS += opencv_imgproc$${OPENCV_VERSION}d.lib
         LIBS += opencv_objdetect$${OPENCV_VERSION}d.lib
     }
-
-    package.path = $$DESTDIR
-    release: {
-        package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_core$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_highgui$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_imgproc$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_objdetect$${OPENCV_VERSION}.dll
+    Release {
+        LIBS += opencv_core$${OPENCV_VERSION}.lib
+        LIBS += opencv_highgui$${OPENCV_VERSION}.lib
+        LIBS += opencv_imgproc$${OPENCV_VERSION}.lib
+        LIBS += opencv_objdetect$${OPENCV_VERSION}.lib
     }
-    debug: {
+
+    package.path = $$OUT_PWD/$$DESTDIR
+    Debug {
         package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_core$${OPENCV_VERSION}d.dll
         package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_highgui$${OPENCV_VERSION}d.dll
         package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_imgproc$${OPENCV_VERSION}d.dll
         package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_objdetect$${OPENCV_VERSION}d.dll
+    }
+    Release {
+        package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_core$${OPENCV_VERSION}.dll
+        package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_highgui$${OPENCV_VERSION}.dll
+        package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_imgproc$${OPENCV_VERSION}.dll
+        package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_objdetect$${OPENCV_VERSION}.dll
     }
     package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml
     package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_eye.xml
@@ -56,13 +56,6 @@ DESTDIR = bin
     package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_mcs_righteye.xml
 
     INSTALLS += package
-}
-
-*-g++* {
-    LIBS += -lopencv_core
-    LIBS += -lopencv_highgui
-    LIBS += -lopencv_imgproc
-    LIBS += -lopencv_objdetect
 }
 
 SOURCES += \
@@ -82,6 +75,6 @@ HEADERS += \
     facepreprocessor.h \
     facepreprocessorfactory.h
 
-target.path = $$DESTDIR
+TARGET.path = $$OUT_PWD/$$DESTDIR
 
 INSTALLS += target
