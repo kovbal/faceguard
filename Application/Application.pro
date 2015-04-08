@@ -8,7 +8,7 @@ isEmpty(OPENCV_PATH) {
     OPENCV_PATH = $$PWD/../../opencv
 }
 isEmpty(OPENCV_VERSION) {
-    OPENCV_VERSION = 2410
+    OPENCV_VERSION = 2411
 }
 
 DESTDIR = bin
@@ -29,7 +29,10 @@ DESTDIR = bin
     LIBS += opencv_objdetect$${OPENCV_VERSION}.lib
 
     package.path = $$DESTDIR
-    package.files = opencv_core$${OPENCV_VERSION}.dll opencv_highgui$${OPENCV_VERSION}.dll opencv_imgproc$${OPENCV_VERSION}.dll opencv_objdetect$${OPENCV_VERSION}.dll
+    package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_core$${OPENCV_VERSION}.dll
+    package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_highgui$${OPENCV_VERSION}.dll
+    package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_imgproc$${OPENCV_VERSION}.dll
+    package.files += $${OPENCV_PATH}/build/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_objdetect$${OPENCV_VERSION}.dll
     package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml
     package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_eye.xml
     package.files += $${OPENCV_PATH}/build/share/OpenCV/haarcascades/haarcascade_mcs_eyepair_small.xml
@@ -47,7 +50,7 @@ DESTDIR = bin
 }
 
 SOURCES += \
-        main.cpp \
+    main.cpp \
     mainwindow.cpp \
     databasecreator.cpp \
     facepreprocessor.cpp \
