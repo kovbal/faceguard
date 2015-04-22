@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include <QTimer>
 
+#include "facerecognizerselectorwidget.h"
 #include "databasecreator.h"
 
 namespace Ui {
@@ -16,27 +17,32 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    std::unique_ptr<cv::VideoCapture> camera;
+	std::unique_ptr<cv::VideoCapture> camera;
 
-    QTimer timer;
+	QTimer timer;
 
-    DatabaseCreator databasecreator_gui;
+	bool processCamera = true;
+
+	DatabaseCreator databaseCreatorWidget;
+	FaceRecognizerSelectorWidget faceRecognizerSelectorWidget;
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+	explicit MainWindow(QWidget *parent = 0);
+	~MainWindow();
 
 private slots:
-    void on_pushButton_identify_clicked();
-
-    void updateCameraImage();
-
-    void on_actionCreate_database_triggered();
+	void on_pushButton_identify_clicked();
+	void on_actionCreate_database_triggered();
+	void on_actionSelect_face_recognizer_triggered();
 
 private:
-    Ui::MainWindow *ui;
+	void ContinueCameraProcessing();
+	void UpdateCameraImage();
+
+private:
+	Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H

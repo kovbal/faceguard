@@ -24,7 +24,7 @@ FacePreprocessorFactory::FacePreprocessorFactory()
         "haarcascade_mcs_lefteye.xml",
         "haarcascade_mcs_righteye.xml"
     };
-    for(auto &path : classifierPaths)
+	for(auto& path : classifierPaths)
     {
         path = QCoreApplication::applicationDirPath() + QDir::separator() + path;
     }

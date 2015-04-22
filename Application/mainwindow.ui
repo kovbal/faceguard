@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>FaceGuard</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -57,7 +57,7 @@
      <string>File</string>
     </property>
     <addaction name="actionCreate_database"/>
-    <addaction name="actionLoad_database"/>
+    <addaction name="actionSelect_face_recognizer"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -67,9 +67,9 @@
     <string>Create database</string>
    </property>
   </action>
-  <action name="actionLoad_database">
+  <action name="actionSelect_face_recognizer">
    <property name="text">
-    <string>Load database</string>
+    <string>Select face recognizer</string>
    </property>
   </action>
  </widget>

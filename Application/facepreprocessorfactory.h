@@ -8,6 +8,7 @@
 class FacePreprocessorFactory final
 {
     FaceClassifiers classifiers;
+
 public:
     FacePreprocessorFactory();
 

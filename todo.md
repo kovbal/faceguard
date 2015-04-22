@@ -10,8 +10,8 @@ Balazs
 Gergo
 
  - training
-	- mappa beolvasasa rekurzivan, cimkek kinyerese a fajlnevbol
-	- preprocessing
+	- mappa beolvasasa rekurzivan, cimkek kinyerese a fajlnevbol ✓ 
+	- preprocessing ✓ 
 
  - identifying
 	- preprocessing
