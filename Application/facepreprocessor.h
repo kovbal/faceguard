@@ -27,6 +27,8 @@ struct FaceClassifiers
 
 class FacePreprocessor final
 {
+	bool markFoundFeatures = true;
+
     static const double MAX_ROTATE_ANGLE;
     const cv::Mat& input;
     cv::Mat normalized;
@@ -49,9 +51,10 @@ class FacePreprocessor final
 
     static cv::Rect LargestRect(const std::vector<cv::Rect>& rects);
  public:
-    FacePreprocessor(FaceClassifiers classifiers, const cv::Mat& input) throw(std::invalid_argument);
+	FacePreprocessor(FaceClassifiers classifiers, const cv::Mat& input, bool markFoundFeatures) throw(std::invalid_argument);
     cv::Mat Preprocess() throw (NoFaceFoundException);
 
+	bool GetMarkFoundFeatures() const;
     double GetAccuracy() const;
     bool IsFaceFound() const;
     bool AreEyesFound() const;
