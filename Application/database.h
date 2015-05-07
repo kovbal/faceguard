@@ -30,6 +30,8 @@ public:
 	void Train();
 	void Save(const QString& filePath);
 	void Load(const QString& filePath);
+
+	const QString* FindNameByLabel(int label);
 };
 
 #endif // DATABASE_H

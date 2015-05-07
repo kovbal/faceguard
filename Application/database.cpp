@@ -69,6 +69,19 @@ void Database::Load(const QString& filePath)
 	FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->load(filePath.toStdString());
 }
 
+const QString* Database::FindNameByLabel(int label)
+{
+	QMapIterator<QString, int> it(nameLabels);
+	while (it.hasNext())
+	{
+		auto item = it.next();
+		if (item.value() == label)
+		{
+			return &item.key();
+		}
+	}
+}
+
 void Database::ImportNameLabels(const QString fileName)
 {
 	nameLabels.clear();

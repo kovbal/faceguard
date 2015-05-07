@@ -215,7 +215,7 @@ void MainWindow::on_pushButton_identifyCamera_clicked()
 			double confidence = 0.0;
 			FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->predict(preprocessedImage, label, confidence);
 
-			qDebug() << label << confidence;
+			qDebug() << *database.FindNameByLabel(label) << confidence;
 		}
 		catch (std::exception e)
 		{
@@ -246,7 +246,7 @@ void MainWindow::on_pushButton_identifyImage_clicked()
 				double confidence = 0.0;
 				FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->predict(preprocessedImage, label, confidence);
 
-				qDebug() << label << confidence;
+				qDebug() << *database.FindNameByLabel(label) << confidence;
 			}
 			catch (std::exception e)
 			{
