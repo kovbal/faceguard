@@ -14,7 +14,7 @@ static const double PI = std::atan(1.0) * 4;
 
 using namespace cv;
 
-static const bool MARK_FOUND_FEATURES = false;
+static const bool MARK_FOUND_FEATURES = true;
 
 FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input)  throw(std::invalid_argument)
     : input(input),
@@ -338,5 +338,5 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 
     ScaleFace();
 
-    return result;
+	return result;
 }

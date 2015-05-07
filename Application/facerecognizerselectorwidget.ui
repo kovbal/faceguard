@@ -33,7 +33,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page_select"/>
      <widget class="QWidget" name="page_eigen">
@@ -70,60 +70,97 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page_fisher">
-      <widget class="QLabel" name="label_3">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>60</y>
-         <width>47</width>
-         <height>13</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>fisher</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label">
-       <property name="geometry">
-        <rect>
-         <x>80</x>
-         <y>110</y>
-         <width>151</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>only eigen face recognizer works</string>
-       </property>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_eigen_2">
+         <property name="text">
+          <string>num_components</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="spinBox_fisherNumComponents">
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>80</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="page_lbph">
-      <widget class="QLabel" name="label_4">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>70</y>
-         <width>47</width>
-         <height>13</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>lbph</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_2">
-       <property name="geometry">
-        <rect>
-         <x>70</x>
-         <y>120</y>
-         <width>151</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>only eigen face recognizer works</string>
-       </property>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="label_eigen_3">
+         <property name="text">
+          <string>radius</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QSpinBox" name="spinBox_lbphRadius">
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="label_eigen_5">
+         <property name="text">
+          <string>grid_x</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QSpinBox" name="spinBox_lbphGridX">
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>8</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="label_eigen_6">
+         <property name="text">
+          <string>grid_y</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QSpinBox" name="spinBox_lbphGridY">
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>8</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QSpinBox" name="spinBox_lbphNeighbors">
+         <property name="maximum">
+          <number>99</number>
+         </property>
+         <property name="value">
+          <number>8</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="label_eigen_4">
+         <property name="text">
+          <string>neighbors</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

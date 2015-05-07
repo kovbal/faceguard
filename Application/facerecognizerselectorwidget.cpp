@@ -39,13 +39,17 @@ void FaceRecognizerSelectorWidget::on_pushButton_clicked()
 		}
 		case 1:
 		{
-			// TODO
+			FaceRecognizerContainer::Instance()->SetFisherFaceRecognizer(ui->spinBox_fisherNumComponents->value());
 
 			break;
 		}
 		case 2:
 		{
-			// TODO
+			FaceRecognizerContainer::Instance()->SetLBPHFaceRecognizer(
+				ui->spinBox_lbphRadius->value(),
+				ui->spinBox_lbphNeighbors->value(),
+				ui->spinBox_lbphGridX->value(),
+				ui->spinBox_lbphGridY->value());
 
 			break;
 		}
