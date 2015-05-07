@@ -41,9 +41,8 @@ void Database::AddImage(const QString& label, cv::Mat& image)
 	QMap<QString, int>::iterator it = nameLabels.find(label);
 	if (it == nameLabels.end())
 	{
-		tmp = namesCounter;
-		nameLabels[label] = namesCounter;
-		++namesCounter;
+		tmp = nameLabels.size();
+		nameLabels[label] = tmp;
 	}
 	else
 	{
@@ -72,6 +71,7 @@ void Database::Load(const QString& filePath)
 const QString* Database::FindNameByLabel(int label)
 {
 	QMapIterator<QString, int> it(nameLabels);
+
 	while (it.hasNext())
 	{
 		auto item = it.next();
@@ -80,6 +80,8 @@ const QString* Database::FindNameByLabel(int label)
 			return &item.key();
 		}
 	}
+
+	return nullptr;
 }
 
 void Database::ImportNameLabels(const QString fileName)
@@ -99,7 +101,10 @@ void Database::ImportNameLabels(const QString fileName)
 			stream >> name;
 			stream >> label;
 
-			nameLabels[name] = label;
+			if (!stream.atEnd())
+			{
+				nameLabels[name] = label;
+			}
 		}
 	}
 }

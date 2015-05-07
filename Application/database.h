@@ -11,7 +11,6 @@
 class Database
 {
 	QMap<QString, int> nameLabels;
-	int namesCounter = 0;
 
 	std::vector<cv::Mat> trainSrc;
 	std::vector<int> trainLabels;
