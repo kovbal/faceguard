@@ -12,7 +12,7 @@ class FacePreprocessorFactory final
 public:
     FacePreprocessorFactory();
 
-    FacePreprocessor GetPreprocessor(const cv::Mat& image);
+    FacePreprocessor GetPreprocessor(const cv::Mat& image, bool markFoundFeatures);
 };
 
 #endif // FACEPREPROCESSORFACTORY_H

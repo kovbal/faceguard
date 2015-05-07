@@ -29,7 +29,12 @@ DatabaseCreator::DatabaseCreator(QWidget *parent) :
 
 DatabaseCreator::~DatabaseCreator()
 {
-    delete ui;
+	delete ui;
+}
+
+void DatabaseCreator::SetDatabase(Database* database)
+{
+	this->database = database;
 }
 
 void DatabaseCreator::on_pushButton_read_browse_clicked()
@@ -44,43 +49,6 @@ void DatabaseCreator::on_pushButton_save_browse_clicked()
 	QString str = QFileDialog::getSaveFileName(this, tr("Save file"), tr(""), tr("Valami (*.facedb)"));
 
     ui->lineEdit_save->setText(str);
-}
-
-void exportNameLabels(const QString fileName, const QMap<QString, int> &nameLabels)
-{
-	QFile file(fileName);
-	if (file.open(QIODevice::WriteOnly))
-	{
-		QTextStream stream(&file);
-
-		QMapIterator<QString, int> it(nameLabels);
-		while (it.hasNext())
-		{
-			it.next();
-
-			stream << it.key() << " " << it.value() << "\n";
-		}
-	}
-}
-
-void importNameLabels(const QString fileName, QMap<QString, int> &nameLabels)
-{
-	QFile file(fileName);
-	if (file.open(QIODevice::ReadOnly))
-	{
-		QTextStream stream(&file);
-
-		QString name;
-		int label;
-
-		while (!stream.atEnd())
-		{
-			stream >> name;
-			stream >> label;
-
-			nameLabels[name] = label;
-		}
-	}
 }
 
 void DatabaseCreator::on_pushButton_create_clicked()
@@ -102,12 +70,6 @@ void DatabaseCreator::on_pushButton_create_clicked()
 			files.append(it.fileInfo());
 		}
 
-		QMap<QString, int> nameLabels;
-		int namesCounter = 0;
-
-		std::vector<cv::Mat> trainSrc;
-		std::vector<int> trainLabels;
-
 		int progressCounter = 0;
 		QListIterator<QFileInfo> fileIt(files);
 		while (fileIt.hasNext())
@@ -121,24 +83,11 @@ void DatabaseCreator::on_pushButton_create_clicked()
 			{
 				QString name = fileNameRe.cap(1);
 
-				int label = -1;
-				QMap<QString, int>::iterator it = nameLabels.find(name);
-				if (it == nameLabels.end())
-				{
-					label = namesCounter;
-					nameLabels[name] = namesCounter;
-					++namesCounter;
-				}
-				else
-				{
-					label = it.value();
-				}
-
 				try
 				{
 					cv::Mat rawImage = cv::imread(fileInfo.filePath().toStdString());
 
-					FacePreprocessor facePreprocessor = preprocessorFactory.GetPreprocessor(rawImage);
+					FacePreprocessor facePreprocessor = preprocessorFactory.GetPreprocessor(rawImage, false);
 					cv::Mat preprocessedImage = facePreprocessor.Preprocess();
 
 					QDir dir("");
@@ -146,23 +95,22 @@ void DatabaseCreator::on_pushButton_create_clicked()
 					dir.mkdir("preprocessed");
 					cv::imwrite(("preprocessed/" + fileInfo.fileName()).toStdString(), preprocessedImage);
 
-					trainSrc.push_back(preprocessedImage);
-					trainLabels.push_back(label);
+					database->AddImage(name, preprocessedImage);
 				}
 				catch (NoFaceFoundException)
 				{
-					qDebug() << "Could not find face" << fileInfo.filePath();
+//					qDebug() << "Could not find face" << fileInfo.filePath();
 				}
 			}
 		}
 
 		qDebug() << "Save name labels";
-		exportNameLabels(saveFile + ".nlabels", nameLabels);
+		database->ExportNameLabels(saveFile + ".nlabels");
 
 		qDebug() << "Train face recognizer";
-		FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->train(trainSrc, trainLabels);
+		database->Train();
 		qDebug() << "Save face recognizer";
-		FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->save(saveFile.toStdString());
+		database->Save(saveFile);
 	}
 	else
 	{

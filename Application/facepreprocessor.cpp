@@ -14,12 +14,11 @@ static const double PI = std::atan(1.0) * 4;
 
 using namespace cv;
 
-static const bool MARK_FOUND_FEATURES = true;
-
-FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input)  throw(std::invalid_argument)
-    : input(input),
+FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input, bool markFoundFeatures)  throw(std::invalid_argument)
+	: markFoundFeatures(markFoundFeatures),
+	  input(input),
       result(Mat(input.rows, input.cols, CV_8UC1)),
-      classifiers(classifiers)
+	  classifiers(classifiers)
 {
     if (classifiers.face.get() == nullptr)
         throw std::invalid_argument("face classifier nullptr");
@@ -82,8 +81,8 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
     classifiers.eyePair->detectMultiScale(result, eyes, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT);
     if(eyes.empty())
         return empty;
-    qDebug() << "eye pair was found";
-    if (MARK_FOUND_FEATURES)
+//    qDebug() << "eye pair was found";
+	if (markFoundFeatures)
         rectangle(result, eyes.front(), 1);
 
     std::vector<Rect> lefts;
@@ -93,14 +92,14 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
     classifiers.eyeLeft->detectMultiScale(result(cRect), lefts, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT);
     if(lefts.empty())
     {
-        qDebug () << "left wasnt found";
+//        qDebug () << "left wasnt found";
         return empty;
     }
     cRect.x += cRect.width;
     classifiers.eyeLeft->detectMultiScale(result(cRect), rights, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT);
     if(rights.empty())
     {
-        qDebug () << "right wasnt found";
+//        qDebug () << "right wasnt found";
         return empty;
     }
     rights.front().x += cRect.width;
@@ -111,7 +110,7 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
     lefts.front().y += eyes.front().y;
     rights.front().x += eyes.front().x;
     rights.front().y += eyes.front().y;
-    if (MARK_FOUND_FEATURES)
+	if (markFoundFeatures)
     {
         rectangle(result, lefts.front(), 1);
         rectangle(result, rights.front(), 1);
@@ -138,7 +137,7 @@ std::vector<Rect> FacePreprocessor::GetEyes()
     else
     {
         classifiers.eye->detectMultiScale(result(eyePairR.front()), eyes, 1.1, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
-        if (MARK_FOUND_FEATURES)
+		if (markFoundFeatures)
             rectangle(result, eyePairR.front(), 255);
     }
     for (auto eye : eyes)
@@ -153,7 +152,7 @@ std::vector<Rect> FacePreprocessor::GetEyes()
             eye.x += upperHalfOfFace.x;
             eye.y += upperHalfOfFace.y;
         }
-        if (MARK_FOUND_FEATURES)
+		if (markFoundFeatures)
             rectangle(result, eye, 1);
     }
 
@@ -178,7 +177,7 @@ std::vector<Rect> FacePreprocessor::GetEyes()
 
     if(eyes.size() < 2)
     {
-        qDebug() << "only" << eyes.size() << "eyes were found";
+//        qDebug() << "only" << eyes.size() << "eyes were found";
         eyes.clear();
         return eyes;
     }
@@ -226,7 +225,7 @@ void FacePreprocessor::RotateFace()
 
     double angle = GetRotation(eyes[0], eyes[1]);
     angle = std::round(angle * 10.0) / 10.0;
-    qDebug() << "rotation angle: " << angle;
+//    qDebug() << "rotation angle: " << angle;
     if (std::abs(angle) < std::numeric_limits<double>::epsilon() * 3 || std::abs(angle) > MAX_ROTATE_ANGLE)
         return;
 
@@ -240,7 +239,7 @@ void FacePreprocessor::RotateFace()
         int bottom = std::max(0, std::max(0, boundingBox.y) + boundingBox.height - normalized.rows);
         int left = -std::min(0, boundingBox.x);
         int right = std::max(0, std::max(0, boundingBox.x) + boundingBox.width - normalized.cols);
-        qDebug () << top << bottom << left << right;
+//        qDebug () << top << bottom << left << right;
         copyMakeBorder(normalized, normalized, top, bottom, left, right, BORDER_REPLICATE);
         boundingBox.x += left;
         boundingBox.y += top;
@@ -339,4 +338,10 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
     ScaleFace();
 
 	return result;
+
+}
+
+bool FacePreprocessor::GetMarkFoundFeatures() const
+{
+	return markFoundFeatures;
 }

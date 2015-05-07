@@ -104,7 +104,8 @@ SOURCES += \
     facepreprocessor.cpp \
     facepreprocessorfactory.cpp \
     facerecognizerselectorwidget.cpp \
-    facerecognizercontainer.cpp
+    facerecognizercontainer.cpp \
+    database.cpp
 
 FORMS += \
     mainwindow.ui \
@@ -117,7 +118,8 @@ HEADERS += \
     facepreprocessor.h \
     facepreprocessorfactory.h \
     facerecognizerselectorwidget.h \
-    facerecognizercontainer.h
+    facerecognizercontainer.h \
+    database.h
 
 TARGET.path = $$OUT_PWD/$$DESTDIR
 

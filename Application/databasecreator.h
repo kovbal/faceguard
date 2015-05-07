@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QProgressBar>
 
+#include "database.h"
 #include "facepreprocessorfactory.h"
 
 namespace Ui {
@@ -16,9 +17,13 @@ class DatabaseCreator : public QDialog
 
 	FacePreprocessorFactory preprocessorFactory;
 
+	Database* database = nullptr;
+
 public:
     explicit DatabaseCreator(QWidget *parent = 0);
     ~DatabaseCreator();
+
+	void SetDatabase(Database* database);
 
 private slots:
     void on_pushButton_read_browse_clicked();
