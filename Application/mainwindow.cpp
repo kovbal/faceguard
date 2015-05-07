@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	timer.start(30);
 
 	camera.reset(new cv::VideoCapture(0));
+
+	ui->label_foundName->clear();
 }
 
 MainWindow::~MainWindow()
@@ -215,6 +217,7 @@ void MainWindow::on_pushButton_identifyCamera_clicked()
 			double confidence = 0.0;
 			FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->predict(preprocessedImage, label, confidence);
 
+			ui->label_foundName->setText(QString("Found: ") + *database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
 			qDebug() << label << *database.FindNameByLabel(label) << confidence;
 		}
 		catch (std::exception e)
@@ -246,11 +249,12 @@ void MainWindow::on_pushButton_identifyImage_clicked()
 				double confidence = 0.0;
 				FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->predict(preprocessedImage, label, confidence);
 
+				ui->label_foundName->setText(QString("Found: ") + *database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
 				qDebug() << label << *database.FindNameByLabel(label) << confidence;
 			}
 			catch (std::exception e)
 			{
-	//			qDebug() << e.what();
+//				qDebug() << e.what();
 			}
 			catch (NoFaceFoundException)
 			{

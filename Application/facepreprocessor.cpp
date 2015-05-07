@@ -278,7 +278,7 @@ void FacePreprocessor::ScaleFace()
     aspected.y = 0;
 
     result = scaled(aspected);
-    resize(result, result, Size(512, 512), 0.0, 0.0, CV_INTER_LANCZOS4);
+	resize(result, result, Size(384, 384), 0.0, 0.0, CV_INTER_LANCZOS4);
 }
 
 bool FacePreprocessor::IsFaceFound() const
