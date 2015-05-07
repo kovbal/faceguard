@@ -231,7 +231,7 @@ void MainWindow::on_pushButton_identifyImage_clicked()
 {
 	if (FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj)
 	{
-		QString loadFile = QFileDialog::getOpenFileName(this, tr("Save file"), tr(""), tr("Image (*.jpg, *.png, *.jpeg)"));;
+		QString loadFile = QFileDialog::getOpenFileName(this, tr("Save file"), tr(""), tr("Image (*.jpg *.png *.jpeg)"));;
 
 		if (!loadFile.isEmpty())
 		{
