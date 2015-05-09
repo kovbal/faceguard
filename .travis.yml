@@ -19,6 +19,7 @@ script:
 #- if [ "$CXX" != "clang++" ]; then qmake -qt=qt5 DEFINES+="final=Q_DECL_FINAL" ; fi
 - if [ "$CXX" != "clang++" ]; then qmake -qt=qt5 ; fi
 - make
+- make install
 
 compiler:
 #- clang
