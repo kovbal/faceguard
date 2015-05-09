@@ -1,6 +1,7 @@
 TARGET = faceguard
 
 CONFIG += stl rtti warn_on
+CONFIG += c++11
 
 QT += gui widgets core
 
