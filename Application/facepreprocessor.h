@@ -27,7 +27,7 @@ struct FaceClassifiers
 
 class FacePreprocessor final
 {
-	bool markFoundFeatures = true;
+    bool markFoundFeatures;
 
     static const double MAX_ROTATE_ANGLE;
     const cv::Mat& input;

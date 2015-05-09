@@ -1,6 +1,7 @@
 TARGET = faceguard
 
 CONFIG += stl rtti warn_on
+CONFIG += c++11
 
 QT += gui widgets core
 
@@ -97,6 +98,14 @@ DESTDIR = bin
     INSTALLS += qt_dll
 }
 
+unix {
+    LIBS += -lopencv_core
+    LIBS += -lopencv_highgui
+    LIBS += -lopencv_imgproc
+    LIBS += -lopencv_objdetect
+    LIBS += -lopencv_contrib
+}
+
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
@@ -121,6 +130,6 @@ HEADERS += \
     facerecognizercontainer.h \
     database.h
 
-TARGET.path = $$OUT_PWD/$$DESTDIR
+target.path = $$OUT_PWD/$$DESTDIR
 
 INSTALLS += target
