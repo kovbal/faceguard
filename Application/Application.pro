@@ -122,6 +122,6 @@ HEADERS += \
     facerecognizercontainer.h \
     database.h
 
-TARGET.path = $$OUT_PWD/$$DESTDIR
+target.path = $$OUT_PWD/$$DESTDIR
 
 INSTALLS += target
