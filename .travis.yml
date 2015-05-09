@@ -2,7 +2,7 @@ language: cpp
 
 before_install:
 - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
-- if [ "$CXX" = "g++" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test; fi
+- if [ "$CXX" = "g++" ]; then sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test; fi
 - sudo apt-get update -qq
 - sudo apt-get install libopencv-dev
 - sudo apt-get install qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
