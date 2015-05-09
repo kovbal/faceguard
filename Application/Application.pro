@@ -98,6 +98,14 @@ DESTDIR = bin
     INSTALLS += qt_dll
 }
 
+unix {
+    LIBS += -lopencv_core
+    LIBS += -lopencv_highgui
+    LIBS += -lopencv_imgproc
+    LIBS += -lopencv_objdetect
+    LIBS += -lopencv_contrib
+}
+
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
