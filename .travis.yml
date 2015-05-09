@@ -19,7 +19,7 @@ script:
 - make
 
 compiler:
-- clang
+#- clang
 - gcc
 
 notifications:
