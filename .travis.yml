@@ -12,7 +12,8 @@ before_install:
 
 script:
 - cd Application
-- qmake -qt=qt5
+- if [ "$CXX" == "clang++" ]; then qmake -qt=qt5 -spec linux-clang++ ; fi
+- if [ "$CXX" != "clang++" ]; then qmake -qt=qt5 ; fi
 - make
 
 compiler:
