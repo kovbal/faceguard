@@ -33,15 +33,7 @@
 
 #include "facerecognizercontainer.h"
 
-Database::Database()
-{
-}
-
-Database::~Database()
-{
-}
-
-const QMap<QString, int>&Database::GetNameLabels() const
+const QMap<QString, int>& Database::GetNameLabels() const
 {
 	return nameLabels;
 }
@@ -63,7 +55,7 @@ void Database::ExportNameLabels(const QString fileName)
 	}
 }
 
-void Database::AddImage(const QString& label, cv::Mat& image)
+void Database::AddImage(const QString& label, const cv::Mat& image)
 {
 	int tmp = -1;
 	QMap<QString, int>::iterator it = nameLabels.find(label);

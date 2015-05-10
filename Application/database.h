@@ -35,7 +35,7 @@
 
 #include <opencv2/opencv.hpp>
 
-class Database
+class Database final
 {
 	QMap<QString, int> nameLabels;
 
@@ -43,15 +43,12 @@ class Database
 	std::vector<int> trainLabels;
 
 public:
-	Database();
-	~Database();
-
 	const QMap<QString, int>& GetNameLabels() const;
 
 	void ExportNameLabels(const QString fileName);
 	void ImportNameLabels(const QString fileName);
 
-	void AddImage(const QString& label, cv::Mat& image);
+    void AddImage(const QString& label, const cv::Mat& image);
 
 	void Train();
 	void Save(const QString& filePath);

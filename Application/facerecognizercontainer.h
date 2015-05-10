@@ -33,7 +33,7 @@
 
 #include <memory>
 
-class FaceRecognizerContainer
+class FaceRecognizerContainer final
 {
 	static std::shared_ptr<FaceRecognizerContainer> faceRecognizerContainer;
 
