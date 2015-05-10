@@ -45,13 +45,11 @@ class DatabaseCreator : public QDialog
 
 	FacePreprocessorFactory preprocessorFactory;
 
-	Database* database = nullptr;
+    Database& database;
 
 public:
-    explicit DatabaseCreator(QWidget *parent = 0);
+    explicit DatabaseCreator(Database& db, QWidget *parent = 0);
     ~DatabaseCreator();
-
-	void SetDatabase(Database* database);
 
 private slots:
     void on_pushButton_read_browse_clicked();

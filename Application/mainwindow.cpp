@@ -40,11 +40,10 @@
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
+    databaseCreatorWidget(database, this),
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-
-	databaseCreatorWidget.SetDatabase(&database);
 
 	connect(&databaseCreatorWidget, &DatabaseCreator::finished, this, &MainWindow::ContinueCameraProcessing);
 	connect(&faceRecognizerSelectorWidget, &FaceRecognizerSelectorWidget::finished, this, &MainWindow::ContinueCameraProcessing);
@@ -239,8 +238,8 @@ void MainWindow::on_pushButton_identifyCamera_clicked()
 			double confidence = 0.0;
 			FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->predict(preprocessedImage, label, confidence);
 
-			ui->label_foundName->setText(QString("Found: ") + *database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
-			qDebug() << label << *database.FindNameByLabel(label) << confidence;
+            ui->label_foundName->setText(QString("Found: ") + database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
+            qDebug() << label << database.FindNameByLabel(label) << confidence;
 		}
         catch (std::exception e)
 		{
@@ -268,8 +267,8 @@ void MainWindow::on_pushButton_identifyImage_clicked()
 				double confidence = 0.0;
 				FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->predict(preprocessedImage, label, confidence);
 
-				ui->label_foundName->setText(QString("Found: ") + *database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
-				qDebug() << label << *database.FindNameByLabel(label) << confidence;
+                ui->label_foundName->setText(QString("Found: ") + database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
+                qDebug() << label << database.FindNameByLabel(label) << confidence;
 			}
 			catch (std::exception e)
 			{

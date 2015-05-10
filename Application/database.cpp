@@ -38,7 +38,7 @@ const QMap<QString, int>& Database::GetNameLabels() const
 	return nameLabels;
 }
 
-void Database::ExportNameLabels(const QString fileName)
+void Database::ExportNameLabels(const QString& fileName)
 {
 	QFile file(fileName);
 	if (file.open(QIODevice::WriteOnly))
@@ -88,7 +88,7 @@ void Database::Load(const QString& filePath)
 	FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->load(filePath.toStdString());
 }
 
-const QString* Database::FindNameByLabel(int label)
+QString Database::FindNameByLabel(int label)
 {
 	QMapIterator<QString, int> it(nameLabels);
 
@@ -97,14 +97,14 @@ const QString* Database::FindNameByLabel(int label)
 		auto item = it.next();
 		if (item.value() == label)
 		{
-			return &item.key();
+            return item.key();
 		}
 	}
 
-	return nullptr;
+    return QString();
 }
 
-void Database::ImportNameLabels(const QString fileName)
+void Database::ImportNameLabels(const QString& fileName)
 {
 	nameLabels.clear();
 

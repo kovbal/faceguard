@@ -57,10 +57,10 @@ class MainWindow : public QMainWindow
 	cv::Mat rawCameraImage;
 	bool processCamera = true;
 
+    Database database;
+
 	DatabaseCreator databaseCreatorWidget;
 	FaceRecognizerSelectorWidget faceRecognizerSelectorWidget;
-
-	Database database;
 
 public:
 	explicit MainWindow(QWidget *parent = 0);

@@ -48,8 +48,9 @@
 
 #include "facerecognizercontainer.h"
 
-DatabaseCreator::DatabaseCreator(QWidget *parent) :
+DatabaseCreator::DatabaseCreator(Database& db, QWidget *parent) :
 	QDialog(parent),
+    database(db),
     ui(new Ui::DatabaseCreator)
 {
     ui->setupUi(this);
@@ -58,11 +59,6 @@ DatabaseCreator::DatabaseCreator(QWidget *parent) :
 DatabaseCreator::~DatabaseCreator()
 {
 	delete ui;
-}
-
-void DatabaseCreator::SetDatabase(Database* database)
-{
-	this->database = database;
 }
 
 void DatabaseCreator::on_pushButton_read_browse_clicked()
@@ -123,7 +119,7 @@ void DatabaseCreator::on_pushButton_create_clicked()
 					dir.mkdir("preprocessed");
 					cv::imwrite(("preprocessed/" + fileInfo.fileName()).toStdString(), preprocessedImage);
 
-					database->AddImage(name, preprocessedImage);
+                    database.AddImage(name, preprocessedImage);
 				}
 				catch (NoFaceFoundException)
 				{
@@ -133,12 +129,12 @@ void DatabaseCreator::on_pushButton_create_clicked()
 		}
 
 		qDebug() << "Save name labels";
-		database->ExportNameLabels(saveFile + ".nlabels");
+        database.ExportNameLabels(saveFile + ".nlabels");
 
 		qDebug() << "Train face recognizer";
-		database->Train();
+        database.Train();
 		qDebug() << "Save face recognizer";
-		database->Save(saveFile);
+        database.Save(saveFile);
 	}
 	else
 	{

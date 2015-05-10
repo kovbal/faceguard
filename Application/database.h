@@ -46,8 +46,8 @@ class Database final
 public:
 	const QMap<QString, int>& GetNameLabels() const;
 
-	void ExportNameLabels(const QString fileName);
-	void ImportNameLabels(const QString fileName);
+    void ExportNameLabels(const QString& fileName);
+    void ImportNameLabels(const QString& fileName);
 
     void AddImage(const QString& label, const cv::Mat& image);
 
@@ -55,7 +55,7 @@ public:
 	void Save(const QString& filePath);
 	void Load(const QString& filePath);
 
-	const QString* FindNameByLabel(int label);
+    QString FindNameByLabel(int label);
 };
 
 #endif // DATABASE_H
