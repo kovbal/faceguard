@@ -104,31 +104,29 @@ void MainWindow::UpdateCameraImage()
 		*camera >> rawCameraImage;
 
 		bool isPreprocessSuccess = false;
+        QImage img;
 
 		try
 		{
 			FacePreprocessor facePreprocessor = preprocessorFactory.GetPreprocessor(rawCameraImage, true);
 			cv::Mat preprocessedImage = facePreprocessor.Preprocess();
 
-			QImage img = cvMat2QImage(preprocessedImage);
-			QPixmap pixmap;
-			pixmap.convertFromImage(img);
-			ui->label->setPixmap(pixmap);
+            img = cvMat2QImage(preprocessedImage);
 
 			isPreprocessSuccess = true;
 		}
 		catch (std::exception e)
 		{
-//			qDebug() << e.what();
+//            qDebug() << e.what();
 		}
 
 		if (!isPreprocessSuccess)
 		{
-			QImage img = cvMat2QImage(rawCameraImage);
-			QPixmap pixmap;
-			pixmap.convertFromImage(img);
-			ui->label->setPixmap(pixmap);
+            img = cvMat2QImage(rawCameraImage);
 		}
+        QPixmap pixmap;
+        pixmap.convertFromImage(img);
+        ui->label->setPixmap(pixmap);
 	}
 }
 

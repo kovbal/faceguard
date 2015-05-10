@@ -31,7 +31,7 @@
 
 #include <stdexcept>
 
-class NoFaceFoundException : std::logic_error
+class NoFaceFoundException final : public std::logic_error
 {
 public:
     NoFaceFoundException() : std::logic_error("No face can be found on the given image.") {}
