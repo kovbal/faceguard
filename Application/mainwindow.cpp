@@ -122,9 +122,6 @@ void MainWindow::UpdateCameraImage()
 		{
 //			qDebug() << e.what();
 		}
-		catch (NoFaceFoundException)
-		{
-		}
 
 		if (!isPreprocessSuccess)
 		{
@@ -172,9 +169,6 @@ void MainWindow::on_pushButton_addToDatabasePlan_clicked()
 	catch (std::exception e)
 	{
 //		qDebug() << e.what();
-	}
-	catch (NoFaceFoundException)
-	{
 	}
 }
 
@@ -248,10 +242,7 @@ void MainWindow::on_pushButton_identifyCamera_clicked()
 			ui->label_foundName->setText(QString("Found: ") + *database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
 			qDebug() << label << *database.FindNameByLabel(label) << confidence;
 		}
-        catch (NoFaceFoundException)
-        {
-        }
-        catch (std::exception& e)
+        catch (std::exception e)
 		{
 //			qDebug() << e.what();
 		}
@@ -283,9 +274,6 @@ void MainWindow::on_pushButton_identifyImage_clicked()
 			catch (std::exception e)
 			{
 //				qDebug() << e.what();
-			}
-			catch (NoFaceFoundException)
-			{
 			}
 		}
 	}
