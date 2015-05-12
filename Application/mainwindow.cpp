@@ -115,8 +115,9 @@ void MainWindow::UpdateCameraImage()
 
 			isPreprocessSuccess = true;
 		}
-		catch (std::exception e)
+        catch (std::exception& e)
 		{
+            Q_UNUSED(e);
 //            qDebug() << e.what();
 		}
 
@@ -163,8 +164,9 @@ void MainWindow::on_pushButton_addToDatabasePlan_clicked()
 
 		database.AddImage(ui->lineEdit_label->text(), preprocessedImage);
 	}
-	catch (std::exception e)
+    catch (std::exception& e)
 	{
+        Q_UNUSED(e);
 //		qDebug() << e.what();
 	}
 }
@@ -239,9 +241,10 @@ void MainWindow::on_pushButton_identifyCamera_clicked()
             ui->label_foundName->setText(QString("Found: ") + database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
             qDebug() << label << database.FindNameByLabel(label) << confidence;
 		}
-        catch (std::exception e)
+        catch (std::exception& e)
 		{
-//			qDebug() << e.what();
+            Q_UNUSED(e);
+//            qDebug() << e.what();
 		}
 	}
 }
@@ -268,8 +271,9 @@ void MainWindow::on_pushButton_identifyImage_clicked()
                 ui->label_foundName->setText(QString("Found: ") + database.FindNameByLabel(label) + QString(", confidence: ") + QString::number(confidence));
                 qDebug() << label << database.FindNameByLabel(label) << confidence;
 			}
-			catch (std::exception e)
+            catch (std::exception& e)
 			{
+                Q_UNUSED(e);
 //				qDebug() << e.what();
 			}
 		}
