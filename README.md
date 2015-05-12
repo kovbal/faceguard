@@ -29,4 +29,4 @@ After compilation, the following files must be placed in the executable's direct
 License
 -------------
 
-Our application is licensed under the BSD license as it is stated in [LICENSE.TXT](LICENSE.TXT).
+Our application is licensed under the BSD license as it is stated in [LICENSE.txt](LICENSE.txt).
