@@ -128,7 +128,12 @@ void MainWindow::UpdateCameraImage()
         QPixmap pixmap;
         pixmap.convertFromImage(img);
         ui->label->setPixmap(pixmap);
-	}
+    }
+}
+
+int MainWindow::faceRecognizerNotSelected()
+{
+    return QMessageBox::critical(this, tr("Face recognizer not selected"), tr("Please select and apply a face recognizer in the \"File/Select face recognizer\" menu!"));
 }
 
 void MainWindow::on_actionCreate_database_triggered()
@@ -140,7 +145,7 @@ void MainWindow::on_actionCreate_database_triggered()
 	}
 	else
 	{
-		QMessageBox::critical(this, tr("Face recognizer not selected"), tr("Please select and apply a face recognizer in the \"File/Select face recognizer\" menu!"));
+        faceRecognizerNotSelected();
 	}
 }
 
@@ -190,7 +195,7 @@ void MainWindow::on_pushButton_createDatabaseFromPlan_clicked()
 	}
 	else
 	{
-		QMessageBox::critical(this, tr("Face recognizer not selected"), tr("Please select and apply a face recognizer in the \"File/Select face recognizer\" menu!"));
+        faceRecognizerNotSelected();
 	}
 }
 
@@ -213,7 +218,7 @@ void MainWindow::on_actionLoad_database_triggered()
 	}
 	else
 	{
-		QMessageBox::critical(this, tr("Face recognizer not selected"), tr("Please select and apply a face recognizer in the \"File/Select face recognizer\" menu!"));
+        faceRecognizerNotSelected();
 	}
 }
 
@@ -221,11 +226,11 @@ void MainWindow::on_pushButton_identifyCamera_clicked()
 {
 	if (FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj == nullptr)
 	{
-		QMessageBox::critical(this, tr("Face recognizer not selected"), tr("Please select and apply a face recognizer in the \"File/Select face recognizer\" menu!"));
+        faceRecognizerNotSelected();
 	}
 	else if (database.GetNameLabels().empty())
 	{
-		QMessageBox::critical(this, tr("Face recognizer not selected"), tr("Please select and apply a face recognizer in the \"File/Select face recognizer\" menu!"));
+        faceRecognizerNotSelected();
 	}
 	else
 	{
@@ -280,6 +285,6 @@ void MainWindow::on_pushButton_identifyImage_clicked()
 	}
 	else
 	{
-		QMessageBox::critical(this, tr("Face recognizer not selected"), tr("Please select and apply a face recognizer in the \"File/Select face recognizer\" menu!"));
+        faceRecognizerNotSelected();
 	}
 }

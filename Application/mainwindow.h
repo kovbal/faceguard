@@ -80,6 +80,8 @@ private:
 	void ContinueCameraProcessing();
 	void UpdateCameraImage();
 
+    int faceRecognizerNotSelected();
+
 private:
 	Ui::MainWindow *ui;
 };
