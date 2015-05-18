@@ -59,7 +59,7 @@ win* {
     # Qt uses an Unicode handler library, named ICU, which is made up of multiple DLLs
     # the problem with it is that each Qt version uses a different version, so their name change quite often
     # e.g. icuin52.dll -> icuin53.dll
-    # so, we have this little "code" that always picks which is needed
+    # so, we have this little "code" that always picks which one is needed
     unicodeSupportDlls = icuin icuuc icudt
     for (dll, unicodeSupportDlls) {
         dllPath = $$files($$[QT_INSTALL_PREFIX]/bin/$${dll}??.dll)
@@ -71,41 +71,23 @@ win* {
     # a Qt module may be defined multiple times, so this is needed
     uniqueQtModules = $$unique(QT)
 
-    # if we are building a release version, the release DLLs are needed for each module
-    CONFIG(release, debug|release) {
-        for(qtmodule, uniqueQtModules) {
-            # the "Test" module's binary is named "testlib"...
-            equals(qtmodule, "testlib") {
-                qt_dll.files += $$[QT_INSTALL_PREFIX]/bin/Qt$${QT_MAJOR_VERSION}Test.dll
-            } else {
-                # every other module is simple:
-                qt_dll.files += $$[QT_INSTALL_PREFIX]/bin/Qt$${QT_MAJOR_VERSION}$${qtmodule}.dll
-            }
-        }
-    }
-
-    # if we are building a debug build, debug DLLs are needed (note the "d" at the end)
-    CONFIG(debug, debug|release) {
-        for(qtmodule, uniqueQtModules) {
-            # the "Test" module's binary is named "testlib"...
-            equals(qtmodule, "testlib") {
-                qt_dll.files += $$[QT_INSTALL_PREFIX]/bin/Qt$${QT_MAJOR_VERSION}Testd.dll
-            } else {
-                # every other module is simple:
-                qt_dll.files += $$[QT_INSTALL_PREFIX]/bin/Qt$${QT_MAJOR_VERSION}$${qtmodule}d.dll
-            }
+    # we add the proper version for each module
+    for(qtmodule, uniqueQtModules) {
+        # the "Test" module's binary is named "testlib"...
+        equals(qtmodule, "testlib") {
+            Release:qt_dll.files += $$[QT_INSTALL_PREFIX]/bin/Qt$${QT_MAJOR_VERSION}Test.dll
+            Debug:qt_dll.files += $$[QT_INSTALL_PREFIX]/bin/Qt$${QT_MAJOR_VERSION}Testd.dll
+        } else {
+            # every other module is simple:
+            Release:qt_dll.files += $$[QT_INSTALL_PREFIX]/bin/Qt$${QT_MAJOR_VERSION}$${qtmodule}.dll
+            Debug:qt_dll.files += $$[QT_INSTALL_PREFIX]/bin/Qt$${QT_MAJOR_VERSION}$${qtmodule}d.dll
         }
     }
 
     # platform plugins must be placed in the "platforms" directory, so a separate entry is needed
     platform_plugins.path = $$OUT_PWD/$$DESTDIR/platforms
-    CONFIG(release, debug|release) {
-        platform_plugins.files += $$[QT_INSTALL_PREFIX]/plugins/platforms/qwindows.dll
-    }
-
-    CONFIG(debug, debug|release) {
-        platform_plugins.files += $$[QT_INSTALL_PREFIX]/plugins/platforms/qwindowsd.dll
-    }
+    Release:platform_plugins.files += $$[QT_INSTALL_PREFIX]/plugins/platforms/qwindows.dll
+    Debug: platform_plugins.files += $$[QT_INSTALL_PREFIX]/plugins/platforms/qwindowsd.dll
 
     INSTALLS += qt_dll
     INSTALLS += platform_plugins
