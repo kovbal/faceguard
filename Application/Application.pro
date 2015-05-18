@@ -18,6 +18,7 @@ win*:OPENCV_PATH = $$OPENCV_PATH/build
 
 DESTDIR = bin
 
+used_opencv_libs = core highgui imgproc objdetect contrib
 *-msvc* {
     QMAKE_CXXFLAGS += /wd4290
 
@@ -26,57 +27,20 @@ DESTDIR = bin
     OPENCV_ARCH_DIR=x86
     contains(QMAKE_TARGET.arch, x86_64):OPENCV_ARCH_DIR=x64
 
+    !win*-msvc2013: warning("OpenCV libraries might be wrong (other version than VC12)")
+
     QMAKE_LIBDIR += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/lib
 
-    Debug {
-        LIBS += opencv_core$${OPENCV_VERSION}d.lib
-        LIBS += opencv_highgui$${OPENCV_VERSION}d.lib
-        LIBS += opencv_imgproc$${OPENCV_VERSION}d.lib
-        LIBS += opencv_objdetect$${OPENCV_VERSION}d.lib
-        LIBS += opencv_contrib$${OPENCV_VERSION}d.lib
-#        LIBS += opencv_flann$${OPENCV_VERSION}d.lib
-#        LIBS += opencv_features2d$${OPENCV_VERSION}d.lib
-#        LIBS += opencv_calib3d$${OPENCV_VERSION}d.lib
-#        LIBS += opencv_ml$${OPENCV_VERSION}d.lib
-#        LIBS += opencv_video$${OPENCV_VERSION}d.lib
-    }
-    Release {
-        LIBS += opencv_core$${OPENCV_VERSION}.lib
-        LIBS += opencv_highgui$${OPENCV_VERSION}.lib
-        LIBS += opencv_imgproc$${OPENCV_VERSION}.lib
-        LIBS += opencv_objdetect$${OPENCV_VERSION}.lib
-        LIBS += opencv_contrib$${OPENCV_VERSION}.lib
-#        LIBS += opencv_flann$${OPENCV_VERSION}.lib
-#        LIBS += opencv_features2d$${OPENCV_VERSION}.lib
-#        LIBS += opencv_calib3d$${OPENCV_VERSION}.lib
-#        LIBS += opencv_ml$${OPENCV_VERSION}.lib
-#        LIBS += opencv_video$${OPENCV_VERSION}.lib
+    for (opencv_lib, used_opencv_libs) {
+        Debug: LIBS += opencv_$${opencv_lib}$${OPENCV_VERSION}d.lib
+        Release: LIBS += opencv_$${opencv_lib}$${OPENCV_VERSION}.lib
     }
 
+    required_opencv_libs = core highgui imgproc objdetect contrib flann features2d calib3d ml video
     package.path = $$OUT_PWD/$$DESTDIR
-    Debug {
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_core$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_highgui$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_imgproc$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_objdetect$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_contrib$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_flann$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_features2d$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_calib3d$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_ml$${OPENCV_VERSION}d.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_video$${OPENCV_VERSION}d.dll
-    }
-    Release {
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_core$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_highgui$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_imgproc$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_objdetect$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_contrib$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_flann$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_features2d$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_calib3d$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_ml$${OPENCV_VERSION}.dll
-        package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_video$${OPENCV_VERSION}.dll
+    for (opencv_lib, required_opencv_libs) {
+        Debug: package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_$${opencv_lib}$${OPENCV_VERSION}d.dll
+        Release: package.files += $${OPENCV_PATH}/$${OPENCV_ARCH_DIR}/vc12/bin/opencv_$${opencv_lib}$${OPENCV_VERSION}.dll
     }
 
     INSTALLS += package
@@ -148,11 +112,9 @@ win* {
 }
 
 unix {
-    LIBS += -lopencv_core
-    LIBS += -lopencv_highgui
-    LIBS += -lopencv_imgproc
-    LIBS += -lopencv_objdetect
-    LIBS += -lopencv_contrib
+    for (opencv_lib, used_opencv_libs) {
+        LIBS += -lopencv_$${opencv_lib}
+    }
 }
 
 SOURCES += \
