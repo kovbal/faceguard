@@ -1,7 +1,7 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2015, Balázs Kovács, Gergő Róth
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //     * Redistributions of source code must retain the above copyright
@@ -12,7 +12,7 @@
 //     * Neither the name of the University of Pannonia nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -48,8 +48,8 @@
 
 #include "facerecognizercontainer.h"
 
-DatabaseCreator::DatabaseCreator(Database& db, QWidget *parent) :
-	QDialog(parent),
+DatabaseCreator::DatabaseCreator(Database& db, QWidget* parent) :
+    QDialog(parent),
     database(db),
     ui(new Ui::DatabaseCreator)
 {
@@ -58,7 +58,7 @@ DatabaseCreator::DatabaseCreator(Database& db, QWidget *parent) :
 
 DatabaseCreator::~DatabaseCreator()
 {
-	delete ui;
+    delete ui;
 }
 
 void DatabaseCreator::on_pushButton_read_browse_clicked()
@@ -70,74 +70,75 @@ void DatabaseCreator::on_pushButton_read_browse_clicked()
 
 void DatabaseCreator::on_pushButton_save_browse_clicked()
 {
-	QString str = QFileDialog::getSaveFileName(this, tr("Save file"), tr(""), tr("Valami (*.facedb)"));
+    QString str = QFileDialog::getSaveFileName(this, tr("Save file"), tr(""), tr("Valami (*.facedb)"));
 
     ui->lineEdit_save->setText(str);
 }
 
 void DatabaseCreator::on_pushButton_create_clicked()
 {
-	QString directory = ui->lineEdit_read->text();
-	QString saveFile = ui->lineEdit_save->text();
+    QString directory = ui->lineEdit_read->text();
+    QString saveFile = ui->lineEdit_save->text();
 
-	if (!directory.isEmpty() && !saveFile.isEmpty())
-	{
-		QRegExp fileNameRe("(\\w+_\\w+)_\\d+\\.*");
+    if (!directory.isEmpty() && !saveFile.isEmpty())
+    {
+        QRegExp fileNameRe("(\\w+_\\w+)_\\d+\\.*");
 
-		QList<QFileInfo> files;
+        QList<QFileInfo> files;
 
-		QDirIterator it(directory, QStringList() << "*.jpg", QDir::Files, QDirIterator::Subdirectories);
-		while (it.hasNext())
-		{
-			it.next();
+        QDirIterator it(directory, QStringList() << "*.jpg", QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext())
+        {
+            it.next();
 
-			files.append(it.fileInfo());
-		}
+            files.append(it.fileInfo());
+        }
 
-		int progressCounter = 0;
-		QListIterator<QFileInfo> fileIt(files);
-		while (fileIt.hasNext())
-		{
-			qDebug() << progressCounter << files.size();
+        int progressCounter = 0;
+        QListIterator<QFileInfo> fileIt(files);
+        while (fileIt.hasNext())
+        {
+            qDebug() << progressCounter << files.size();
 
-			const QFileInfo &fileInfo = fileIt.next();
-			++progressCounter;
+            const QFileInfo& fileInfo = fileIt.next();
+            ++progressCounter;
 
-			if (fileNameRe.indexIn(fileInfo.fileName()) != -1)
-			{
-				QString name = fileNameRe.cap(1);
+            if (fileNameRe.indexIn(fileInfo.fileName()) != -1)
+            {
+                QString name = fileNameRe.cap(1);
 
-				try
-				{
-					cv::Mat rawImage = cv::imread(fileInfo.filePath().toStdString());
+                try
+                {
+                    cv::Mat rawImage = cv::imread(fileInfo.filePath().toStdString());
 
-					FacePreprocessor facePreprocessor = preprocessorFactory.GetPreprocessor(rawImage, false);
-					cv::Mat preprocessedImage = facePreprocessor.Preprocess();
+                    FacePreprocessor facePreprocessor = preprocessorFactory.GetPreprocessor(rawImage, false);
+                    cv::Mat preprocessedImage = facePreprocessor.Preprocess();
 
-					QDir dir("");
-					dir.rmdir("preprocessed");
-					dir.mkdir("preprocessed");
-					cv::imwrite(("preprocessed/" + fileInfo.fileName()).toStdString(), preprocessedImage);
+                    QDir dir("");
+                    dir.rmdir("preprocessed");
+                    dir.mkdir("preprocessed");
+                    cv::imwrite(("preprocessed/" + fileInfo.fileName()).toStdString(), preprocessedImage);
 
                     database.AddImage(name, preprocessedImage);
-				}
-				catch (NoFaceFoundException)
-				{
-//					qDebug() << "Could not find face" << fileInfo.filePath();
-				}
-			}
-		}
+                }
+                catch (NoFaceFoundException)
+                {
+//                  qDebug() << "Could not find face" << fileInfo.filePath();
+                }
+            }
+        }
 
-		qDebug() << "Save name labels";
+        qDebug() << "Save name labels";
         database.ExportNameLabels(saveFile + ".nlabels");
 
-		qDebug() << "Train face recognizer";
+        qDebug() << "Train face recognizer";
         database.Train();
-		qDebug() << "Save face recognizer";
+        qDebug() << "Save face recognizer";
         database.Save(saveFile);
-	}
-	else
-	{
-		QMessageBox::critical(this, tr("Unspecified input and output"), tr("Please specify the folder with the images, and the output file of the created database!"));
-	}
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Unspecified input and output"),
+                              tr("Please specify the folder with the images, and the output file of the created database!"));
+    }
 }

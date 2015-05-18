@@ -1,7 +1,7 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2015, Balázs Kovács, Gergő Róth
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //     * Redistributions of source code must retain the above copyright
@@ -12,7 +12,7 @@
 //     * Neither the name of the University of Pannonia nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -42,11 +42,12 @@ static const double PI = std::atan(1.0) * 4;
 
 using namespace cv;
 
-FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input, bool markFoundFeatures)  throw(std::invalid_argument)
-	: markFoundFeatures(markFoundFeatures),
-	  input(input),
+FacePreprocessor::FacePreprocessor(FaceClassifiers classifiers, const Mat& input,
+                                   bool markFoundFeatures)  throw(std::invalid_argument)
+    : markFoundFeatures(markFoundFeatures),
+      input(input),
       result(Mat(input.rows, input.cols, CV_8UC1)),
-	  classifiers(classifiers)
+      classifiers(classifiers)
 {
     if (classifiers.face.get() == nullptr)
         throw std::invalid_argument("face classifier nullptr");
@@ -80,13 +81,13 @@ unsigned int FacePreprocessor::GetMinSize() const
 
 Rect FacePreprocessor::LargestRect(const std::vector<Rect>& rects)
 {
-    if(rects.empty())
+    if (rects.empty())
         return Rect();
-    Rect largest = *std::max_element(rects.begin(), rects.end(), [](const Rect& a, const Rect& b)
+    Rect largest = *std::max_element(rects.begin(), rects.end(), [](const Rect & a, const Rect & b)
     {
         return a.area() < b.area();
     }
-    );
+                                    );
     return largest;
 }
 
@@ -107,10 +108,10 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
     std::vector<Rect> eyes;
     eyes.reserve(2);
     classifiers.eyePair->detectMultiScale(result, eyes, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT);
-    if(eyes.empty())
+    if (eyes.empty())
         return empty;
 //    qDebug() << "eye pair was found";
-	if (markFoundFeatures)
+    if (markFoundFeatures)
         rectangle(result, eyes.front(), 1);
 
     std::vector<Rect> lefts;
@@ -118,14 +119,14 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
     Rect cRect = eyes.front();
     cRect.width /= 2;
     classifiers.eyeLeft->detectMultiScale(result(cRect), lefts, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT);
-    if(lefts.empty())
+    if (lefts.empty())
     {
 //        qDebug () << "left wasnt found";
         return empty;
     }
     cRect.x += cRect.width;
     classifiers.eyeLeft->detectMultiScale(result(cRect), rights, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT);
-    if(rights.empty())
+    if (rights.empty())
     {
 //        qDebug () << "right wasnt found";
         return empty;
@@ -138,7 +139,7 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
     lefts.front().y += eyes.front().y;
     rights.front().x += eyes.front().x;
     rights.front().y += eyes.front().y;
-	if (markFoundFeatures)
+    if (markFoundFeatures)
     {
         rectangle(result, lefts.front(), 1);
         rectangle(result, rights.front(), 1);
@@ -152,25 +153,29 @@ std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
 
 std::vector<Rect> FacePreprocessor::GetEyes()
 {
-    const Rect upperHalfOfFace(face.width / 12, face.height / 5, face.width - (face.width / 6), static_cast<int>(face.height / 2.2));
+    const Rect upperHalfOfFace(face.width / 12, face.height / 5, face.width - (face.width / 6),
+                               static_cast<int>(face.height / 2.2));
     const int maxSize = static_cast<int>(std::ceil(std::max(upperHalfOfFace.width, upperHalfOfFace.height) / 5.0));
-    const int minSize = std::max(static_cast<int>(std::floor(std::min(upperHalfOfFace.width, upperHalfOfFace.height) / 20.0)), 3);
+    const int minSize = std::max(static_cast<int>(std::floor(std::min(upperHalfOfFace.width,
+                                 upperHalfOfFace.height) / 20.0)), 3);
     std::vector<Rect> eyes;
     std::vector<Rect> eyePairR;
     //classifiers.eyePair->detectMultiScale(result(upperHalfOfFace), eyePairR, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT);
-    if(eyePairR.empty())
+    if (eyePairR.empty())
     {
-        classifiers.eye->detectMultiScale(result(upperHalfOfFace), eyes, 1.05, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
+        classifiers.eye->detectMultiScale(result(upperHalfOfFace), eyes, 1.05, 6, 0, Size(minSize, minSize), Size(maxSize,
+                                          maxSize));
     }
     else
     {
-        classifiers.eye->detectMultiScale(result(eyePairR.front()), eyes, 1.1, 6, 0, Size(minSize, minSize), Size(maxSize, maxSize));
-		if (markFoundFeatures)
+        classifiers.eye->detectMultiScale(result(eyePairR.front()), eyes, 1.1, 6, 0, Size(minSize, minSize), Size(maxSize,
+                                          maxSize));
+        if (markFoundFeatures)
             rectangle(result, eyePairR.front(), 255);
     }
     for (auto eye : eyes)
     {
-        if(!eyePairR.empty())
+        if (!eyePairR.empty())
         {
             eye.x += eyePairR.front().x;
             eye.y += eyePairR.front().y;
@@ -180,14 +185,14 @@ std::vector<Rect> FacePreprocessor::GetEyes()
             eye.x += upperHalfOfFace.x;
             eye.y += upperHalfOfFace.y;
         }
-		if (markFoundFeatures)
+        if (markFoundFeatures)
             rectangle(result, eye, 1);
     }
 
     // removing intersecting objects
-    for(uint8_t i = 0; i < eyes.size(); i++)
+    for (uint8_t i = 0; i < eyes.size(); i++)
     {
-        for(uint8_t j = 0; j < eyes.size(); j++)
+        for (uint8_t j = 0; j < eyes.size(); j++)
         {
             if (i != j)
             {
@@ -203,7 +208,7 @@ std::vector<Rect> FacePreprocessor::GetEyes()
         }
     }
 
-    if(eyes.size() < 2)
+    if (eyes.size() < 2)
     {
 //        qDebug() << "only" << eyes.size() << "eyes were found";
         eyes.clear();
@@ -211,21 +216,22 @@ std::vector<Rect> FacePreprocessor::GetEyes()
     }
     gotEyes = true;
 
-    if(eyes.size() > 2)
+    if (eyes.size() > 2)
     {
         // finding the pair with lowest angle
         std::vector<std::pair<uint16_t, uint16_t>> helper;
         helper.reserve(eyes.size() * eyes.size() - eyes.size());
-        for(auto i = eyes.begin(); i != eyes.end(); i++)
+        for (auto i = eyes.begin(); i != eyes.end(); i++)
         {
-            for(auto j = eyes.begin(); j != eyes.end(); j++)
+            for (auto j = eyes.begin(); j != eyes.end(); j++)
             {
                 if (i != j)
                     helper.push_back(std::make_pair(std::distance(eyes.begin(), i), std::distance(eyes.begin(), j)));
             }
         }
 
-        std::sort(helper.begin(), helper.end(), [&eyes](const std::pair<uint16_t, uint16_t>& a, const std::pair<uint16_t, uint16_t>& b)
+        std::sort(helper.begin(), helper.end(), [&eyes](const std::pair<uint16_t, uint16_t>& a,
+                  const std::pair<uint16_t, uint16_t>& b)
         {
             double angleA = std::abs(GetRotation(eyes[a.first], eyes[a.second]));
             double angleB = std::abs(GetRotation(eyes[b.first], eyes[b.second]));
@@ -238,7 +244,10 @@ std::vector<Rect> FacePreprocessor::GetEyes()
         std::swap(eyes[1], eyes[helper.front().second]);
     }
 
-    std::sort(eyes.begin(), eyes.begin() + 2, [](const Rect& a, const Rect& b) { return a.x < b.x; });
+    std::sort(eyes.begin(), eyes.begin() + 2, [](const Rect & a, const Rect & b)
+    {
+        return a.x < b.x;
+    });
     eyes.resize(2);
     return eyes;
 }
@@ -246,7 +255,7 @@ std::vector<Rect> FacePreprocessor::GetEyes()
 void FacePreprocessor::RotateFace()
 {
     std::vector<Rect> eyes = GetEyes();
-    if(eyes.size() < 2)
+    if (eyes.size() < 2)
     {
         return;
     }
@@ -289,7 +298,7 @@ void FacePreprocessor::RotateFace()
 void FacePreprocessor::ScaleFace()
 {
     Rect aspected = face;
-    if(face.width < face.height)
+    if (face.width < face.height)
     {
         aspected.width = face.height;
     }
@@ -306,7 +315,7 @@ void FacePreprocessor::ScaleFace()
     aspected.y = 0;
 
     result = scaled(aspected);
-	resize(result, result, Size(384, 384), 0.0, 0.0, CV_INTER_LANCZOS4);
+    resize(result, result, Size(384, 384), 0.0, 0.0, CV_INTER_LANCZOS4);
 }
 
 bool FacePreprocessor::IsFaceFound() const
@@ -327,18 +336,18 @@ bool FacePreprocessor::IsRotated() const
 double FacePreprocessor::GetAccuracy() const
 {
     double accuracy = 0.0;
-    if(IsFaceFound())
+    if (IsFaceFound())
         accuracy += 0.5;
-    if(AreEyesFound())
+    if (AreEyesFound())
         accuracy += 0.25;
-    if(IsRotated())
+    if (IsRotated())
         accuracy += 0.25;
     return accuracy;
 }
 
 Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 {
-    if(input.type() == CV_8UC3)
+    if (input.type() == CV_8UC3)
         cvtColor(input, result, CV_BGR2GRAY);
     else
         result = input;
@@ -348,7 +357,8 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 
     std::vector<Rect> faces;
     Size minSize(GetMinSize(), GetMinSize());
-    classifiers.face->detectMultiScale(result, faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_CANNY_PRUNING, minSize);
+    classifiers.face->detectMultiScale(result, faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_CANNY_PRUNING,
+                                       minSize);
 
     if (!faces.empty())
     {
@@ -365,11 +375,11 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
 
     ScaleFace();
 
-	return result;
+    return result;
 
 }
 
 bool FacePreprocessor::GetMarkFoundFeatures() const
 {
-	return markFoundFeatures;
+    return markFoundFeatures;
 }

@@ -31,24 +31,25 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class FaceRecognizerSelectorWidget;
 }
 
 class FaceRecognizerSelectorWidget : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit FaceRecognizerSelectorWidget(QWidget *parent = 0);
-	~FaceRecognizerSelectorWidget();
+    explicit FaceRecognizerSelectorWidget(QWidget* parent = 0);
+    ~FaceRecognizerSelectorWidget();
 
 private slots:
-	void on_comboBox_activated(int index);
-	void on_pushButton_clicked();
+    void on_comboBox_activated(int index);
+    void on_pushButton_clicked();
 
 private:
-	Ui::FaceRecognizerSelectorWidget *ui;
+    Ui::FaceRecognizerSelectorWidget* ui;
 };
 
 #endif // FACERECOGNIZERSELECTORWIDGET_H

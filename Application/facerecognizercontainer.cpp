@@ -1,7 +1,7 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2015, Balázs Kovács, Gergő Róth
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //     * Redistributions of source code must retain the above copyright
@@ -12,7 +12,7 @@
 //     * Neither the name of the University of Pannonia nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -36,25 +36,25 @@ FaceRecognizerContainer::FaceRecognizerContainer()
 
 std::shared_ptr<FaceRecognizerContainer>& FaceRecognizerContainer::Instance()
 {
-	return faceRecognizerContainer;
+    return faceRecognizerContainer;
 }
 
 cv::Ptr<cv::FaceRecognizer>& FaceRecognizerContainer::CurrentFaceRecognizer()
 {
-	return currentFaceRecognizer;
+    return currentFaceRecognizer;
 }
 
 void FaceRecognizerContainer::SetEigenFaceRecognizer(int num_components, double threshold)
 {
-	currentFaceRecognizer = cv::createEigenFaceRecognizer(num_components, threshold);
+    currentFaceRecognizer = cv::createEigenFaceRecognizer(num_components, threshold);
 }
 
 void FaceRecognizerContainer::SetFisherFaceRecognizer(int num_components, double threshold)
 {
-	currentFaceRecognizer = cv::createFisherFaceRecognizer(num_components, threshold);
+    currentFaceRecognizer = cv::createFisherFaceRecognizer(num_components, threshold);
 }
 
 void FaceRecognizerContainer::SetLBPHFaceRecognizer(int radius, int neighbors, int grid_x, int grid_y, double threshold)
 {
-	currentFaceRecognizer = cv::createLBPHFaceRecognizer(radius, neighbors, grid_x, grid_y, threshold);
+    currentFaceRecognizer = cv::createLBPHFaceRecognizer(radius, neighbors, grid_x, grid_y, threshold);
 }

@@ -35,20 +35,21 @@
 
 class FaceRecognizerContainer final
 {
-	static std::shared_ptr<FaceRecognizerContainer> faceRecognizerContainer;
+    static std::shared_ptr<FaceRecognizerContainer> faceRecognizerContainer;
 
-	cv::Ptr<cv::FaceRecognizer> currentFaceRecognizer;
+    cv::Ptr<cv::FaceRecognizer> currentFaceRecognizer;
 
-	FaceRecognizerContainer();
+    FaceRecognizerContainer();
 
 public:
-	static std::shared_ptr<FaceRecognizerContainer>& Instance();
+    static std::shared_ptr<FaceRecognizerContainer>& Instance();
 
-	cv::Ptr<cv::FaceRecognizer>& CurrentFaceRecognizer();
+    cv::Ptr<cv::FaceRecognizer>& CurrentFaceRecognizer();
 
-	void SetEigenFaceRecognizer(int num_components = 0, double threshold = DBL_MAX);
-	void SetFisherFaceRecognizer(int num_components = 0, double threshold = DBL_MAX);
-	void SetLBPHFaceRecognizer(int radius = 1, int neighbors = 8, int grid_x = 8, int grid_y = 8, double threshold = DBL_MAX);
+    void SetEigenFaceRecognizer(int num_components = 0, double threshold = DBL_MAX);
+    void SetFisherFaceRecognizer(int num_components = 0, double threshold = DBL_MAX);
+    void SetLBPHFaceRecognizer(int radius = 1, int neighbors = 8, int grid_x = 8, int grid_y = 8,
+                               double threshold = DBL_MAX);
 };
 
 #endif // FACERECOGNIZERCONTAINER_H

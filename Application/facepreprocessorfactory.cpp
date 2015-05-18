@@ -1,7 +1,7 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2015, Balázs Kovács, Gergő Róth
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //     * Redistributions of source code must retain the above copyright
@@ -12,7 +12,7 @@
 //     * Neither the name of the University of Pannonia nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -39,39 +39,39 @@
 
 FacePreprocessorFactory::FacePreprocessorFactory()
 {
-	static bool initiated = false;
+    static bool initiated = false;
 
-	if (!initiated)
-	{
-		initiated = true;
+    if (!initiated)
+    {
+        initiated = true;
 
-		classifiers.face = std::make_shared<cv::CascadeClassifier>();
-		classifiers.eye = std::make_shared<cv::CascadeClassifier>();
-		classifiers.eyePair = std::make_shared<cv::CascadeClassifier>();
-		classifiers.eyeLeft = std::make_shared<cv::CascadeClassifier>();
-		classifiers.eyeRight = std::make_shared<cv::CascadeClassifier>();
-		static std::vector<QString> classifierPaths
-		{
-			"haarcascade_frontalface_default.xml",
-			"haarcascade_eye.xml",
-			"haarcascade_mcs_eyepair_small.xml",
-			"haarcascade_mcs_lefteye.xml",
-			"haarcascade_mcs_righteye.xml"
-		};
-		for(auto& path : classifierPaths)
-		{
-			path = QCoreApplication::applicationDirPath() + QDir::separator() + path;
-		}
-		classifiers.face->load(classifierPaths[0].toStdString());
-		classifiers.eye->load(classifierPaths[1].toStdString());
-		classifiers.eyePair->load(classifierPaths[2].toStdString());
-		classifiers.eyeLeft->load(classifierPaths[3].toStdString());
-		classifiers.eyeRight->load(classifierPaths[4].toStdString());
-	}
+        classifiers.face = std::make_shared<cv::CascadeClassifier>();
+        classifiers.eye = std::make_shared<cv::CascadeClassifier>();
+        classifiers.eyePair = std::make_shared<cv::CascadeClassifier>();
+        classifiers.eyeLeft = std::make_shared<cv::CascadeClassifier>();
+        classifiers.eyeRight = std::make_shared<cv::CascadeClassifier>();
+        static std::vector<QString> classifierPaths
+        {
+            "haarcascade_frontalface_default.xml",
+            "haarcascade_eye.xml",
+            "haarcascade_mcs_eyepair_small.xml",
+            "haarcascade_mcs_lefteye.xml",
+            "haarcascade_mcs_righteye.xml"
+        };
+        for (auto& path : classifierPaths)
+        {
+            path = QCoreApplication::applicationDirPath() + QDir::separator() + path;
+        }
+        classifiers.face->load(classifierPaths[0].toStdString());
+        classifiers.eye->load(classifierPaths[1].toStdString());
+        classifiers.eyePair->load(classifierPaths[2].toStdString());
+        classifiers.eyeLeft->load(classifierPaths[3].toStdString());
+        classifiers.eyeRight->load(classifierPaths[4].toStdString());
+    }
 }
 
 FacePreprocessor FacePreprocessorFactory::GetPreprocessor(const cv::Mat& image, bool markFoundFeatures)
 {
-	FacePreprocessor toRet(classifiers, image, markFoundFeatures);
+    FacePreprocessor toRet(classifiers, image, markFoundFeatures);
     return toRet;
 }

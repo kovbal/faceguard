@@ -78,11 +78,12 @@ class FacePreprocessor final
     void ScaleFace();
 
     static cv::Rect LargestRect(const std::vector<cv::Rect>& rects);
- public:
-	FacePreprocessor(FaceClassifiers classifiers, const cv::Mat& input, bool markFoundFeatures) throw(std::invalid_argument);
+public:
+    FacePreprocessor(FaceClassifiers classifiers, const cv::Mat& input,
+                     bool markFoundFeatures) throw(std::invalid_argument);
     cv::Mat Preprocess() throw (NoFaceFoundException);
 
-	bool GetMarkFoundFeatures() const;
+    bool GetMarkFoundFeatures() const;
     double GetAccuracy() const;
     bool IsFaceFound() const;
     bool AreEyesFound() const;

@@ -40,50 +40,51 @@
 #include "facerecognizerselectorwidget.h"
 #include "databasecreator.h"
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	std::unique_ptr<cv::VideoCapture> camera;
+    std::unique_ptr<cv::VideoCapture> camera;
 
-	QTimer timer;
+    QTimer timer;
 
-	FacePreprocessorFactory preprocessorFactory;
+    FacePreprocessorFactory preprocessorFactory;
 
-	cv::Mat rawCameraImage;
-	bool processCamera = true;
+    cv::Mat rawCameraImage;
+    bool processCamera = true;
 
     Database database;
 
-	DatabaseCreator databaseCreatorWidget;
-	FaceRecognizerSelectorWidget faceRecognizerSelectorWidget;
+    DatabaseCreator databaseCreatorWidget;
+    FaceRecognizerSelectorWidget faceRecognizerSelectorWidget;
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+    explicit MainWindow(QWidget* parent = 0);
+    ~MainWindow();
 
 private slots:
-	void on_actionCreate_database_triggered();
-	void on_actionSelect_face_recognizer_triggered();
-	void on_pushButton_addToDatabasePlan_clicked();
-	void on_pushButton_createDatabaseFromPlan_clicked();
-	void on_pushButton_freezeImage_clicked();
-	void on_actionLoad_database_triggered();
-	void on_pushButton_identifyCamera_clicked();
-	void on_pushButton_identifyImage_clicked();
+    void on_actionCreate_database_triggered();
+    void on_actionSelect_face_recognizer_triggered();
+    void on_pushButton_addToDatabasePlan_clicked();
+    void on_pushButton_createDatabaseFromPlan_clicked();
+    void on_pushButton_freezeImage_clicked();
+    void on_actionLoad_database_triggered();
+    void on_pushButton_identifyCamera_clicked();
+    void on_pushButton_identifyImage_clicked();
 
 private:
-	void ContinueCameraProcessing();
-	void UpdateCameraImage();
+    void ContinueCameraProcessing();
+    void UpdateCameraImage();
 
     int faceRecognizerNotSelected();
 
 private:
-	Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
 };
 
 #endif // MAINWINDOW_H

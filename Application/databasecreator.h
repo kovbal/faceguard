@@ -35,7 +35,8 @@
 #include "database.h"
 #include "facepreprocessorfactory.h"
 
-namespace Ui {
+namespace Ui
+{
 class DatabaseCreator;
 }
 
@@ -43,12 +44,12 @@ class DatabaseCreator : public QDialog
 {
     Q_OBJECT
 
-	FacePreprocessorFactory preprocessorFactory;
+    FacePreprocessorFactory preprocessorFactory;
 
     Database& database;
 
 public:
-    explicit DatabaseCreator(Database& db, QWidget *parent = 0);
+    explicit DatabaseCreator(Database& db, QWidget* parent = 0);
     ~DatabaseCreator();
 
 private slots:
@@ -57,7 +58,7 @@ private slots:
     void on_pushButton_create_clicked();
 
 private:
-    Ui::DatabaseCreator *ui;
+    Ui::DatabaseCreator* ui;
 };
 
 #endif // DATABASECREATOR_H

@@ -1,7 +1,7 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2015, Balázs Kovács, Gergő Róth
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //     * Redistributions of source code must retain the above copyright
@@ -12,7 +12,7 @@
 //     * Neither the name of the University of Pannonia nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -35,96 +35,96 @@
 
 const QMap<QString, int>& Database::GetNameLabels() const
 {
-	return nameLabels;
+    return nameLabels;
 }
 
 void Database::ExportNameLabels(const QString& fileName)
 {
-	QFile file(fileName);
-	if (file.open(QIODevice::WriteOnly))
-	{
-		QTextStream stream(&file);
+    QFile file(fileName);
+    if (file.open(QIODevice::WriteOnly))
+    {
+        QTextStream stream(&file);
 
-		QMapIterator<QString, int> it(nameLabels);
-		while (it.hasNext())
-		{
-			it.next();
+        QMapIterator<QString, int> it(nameLabels);
+        while (it.hasNext())
+        {
+            it.next();
 
-			stream << it.key() << " " << it.value() << "\n";
-		}
-	}
+            stream << it.key() << " " << it.value() << "\n";
+        }
+    }
 }
 
 void Database::AddImage(const QString& label, const cv::Mat& image)
 {
-	int tmp = -1;
-	QMap<QString, int>::iterator it = nameLabels.find(label);
-	if (it == nameLabels.end())
-	{
-		tmp = nameLabels.size();
-		nameLabels[label] = tmp;
-	}
-	else
-	{
-		tmp = it.value();
-	}
+    int tmp = -1;
+    QMap<QString, int>::iterator it = nameLabels.find(label);
+    if (it == nameLabels.end())
+    {
+        tmp = nameLabels.size();
+        nameLabels[label] = tmp;
+    }
+    else
+    {
+        tmp = it.value();
+    }
 
-	trainSrc.push_back(image);
-	trainLabels.push_back(tmp);
+    trainSrc.push_back(image);
+    trainLabels.push_back(tmp);
 }
 
 void Database::Train()
 {
-	FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->train(trainSrc, trainLabels);
+    FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->train(trainSrc, trainLabels);
 }
 
 void Database::Save(const QString& filePath)
 {
-	FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->save(filePath.toStdString());
+    FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->save(filePath.toStdString());
 }
 
 void Database::Load(const QString& filePath)
 {
-	FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->load(filePath.toStdString());
+    FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj->load(filePath.toStdString());
 }
 
 QString Database::FindNameByLabel(int label)
 {
-	QMapIterator<QString, int> it(nameLabels);
+    QMapIterator<QString, int> it(nameLabels);
 
-	while (it.hasNext())
-	{
-		auto item = it.next();
-		if (item.value() == label)
-		{
+    while (it.hasNext())
+    {
+        auto item = it.next();
+        if (item.value() == label)
+        {
             return item.key();
-		}
-	}
+        }
+    }
 
     return QString();
 }
 
 void Database::ImportNameLabels(const QString& fileName)
 {
-	nameLabels.clear();
+    nameLabels.clear();
 
-	QFile file(fileName);
-	if (file.open(QIODevice::ReadOnly))
-	{
-		QTextStream stream(&file);
+    QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(&file);
 
-		QString name;
-		int label;
+        QString name;
+        int label;
 
-		while (!stream.atEnd())
-		{
-			stream >> name;
-			stream >> label;
+        while (!stream.atEnd())
+        {
+            stream >> name;
+            stream >> label;
 
-			if (!stream.atEnd())
-			{
-				nameLabels[name] = label;
-			}
-		}
-	}
+            if (!stream.atEnd())
+            {
+                nameLabels[name] = label;
+            }
+        }
+    }
 }

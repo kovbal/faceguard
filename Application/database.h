@@ -38,22 +38,22 @@
 
 class Database final
 {
-	QMap<QString, int> nameLabels;
+    QMap<QString, int> nameLabels;
 
-	std::vector<cv::Mat> trainSrc;
-	std::vector<int> trainLabels;
+    std::vector<cv::Mat> trainSrc;
+    std::vector<int> trainLabels;
 
 public:
-	const QMap<QString, int>& GetNameLabels() const;
+    const QMap<QString, int>& GetNameLabels() const;
 
     void ExportNameLabels(const QString& fileName);
     void ImportNameLabels(const QString& fileName);
 
     void AddImage(const QString& label, const cv::Mat& image);
 
-	void Train();
-	void Save(const QString& filePath);
-	void Load(const QString& filePath);
+    void Train();
+    void Save(const QString& filePath);
+    void Load(const QString& filePath);
 
     QString FindNameByLabel(int label);
 };

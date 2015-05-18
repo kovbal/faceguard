@@ -1,7 +1,7 @@
 /*M///////////////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2015, Balázs Kovács, Gergő Róth
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //     * Redistributions of source code must retain the above copyright
@@ -12,7 +12,7 @@
 //     * Neither the name of the University of Pannonia nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 // ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -31,55 +31,55 @@
 
 #include "facerecognizercontainer.h"
 
-FaceRecognizerSelectorWidget::FaceRecognizerSelectorWidget(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::FaceRecognizerSelectorWidget)
+FaceRecognizerSelectorWidget::FaceRecognizerSelectorWidget(QWidget* parent) :
+    QDialog(parent),
+    ui(new Ui::FaceRecognizerSelectorWidget)
 {
-	ui->setupUi(this);
+    ui->setupUi(this);
 
-	ui->comboBox->addItem("Eigen Face Recognizer");
-	ui->comboBox->addItem("Fisher Face Recognizer");
-	ui->comboBox->addItem("LBPH Face Recognizer");
+    ui->comboBox->addItem("Eigen Face Recognizer");
+    ui->comboBox->addItem("Fisher Face Recognizer");
+    ui->comboBox->addItem("LBPH Face Recognizer");
 
-	ui->comboBox->setCurrentIndex(-1);
-	ui->stackedWidget->setCurrentIndex(0);
+    ui->comboBox->setCurrentIndex(-1);
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 FaceRecognizerSelectorWidget::~FaceRecognizerSelectorWidget()
 {
-	delete ui;
+    delete ui;
 }
 
 void FaceRecognizerSelectorWidget::on_comboBox_activated(int index)
 {
-	ui->stackedWidget->setCurrentIndex(index + 1);
+    ui->stackedWidget->setCurrentIndex(index + 1);
 }
 
 void FaceRecognizerSelectorWidget::on_pushButton_clicked()
 {
-	switch (ui->comboBox->currentIndex())
-	{
-		case 0:
-		{
-			FaceRecognizerContainer::Instance()->SetEigenFaceRecognizer(ui->spinBox_eigenNumComponents->value());
+    switch (ui->comboBox->currentIndex())
+    {
+    case 0:
+    {
+        FaceRecognizerContainer::Instance()->SetEigenFaceRecognizer(ui->spinBox_eigenNumComponents->value());
 
-			break;
-		}
-		case 1:
-		{
-			FaceRecognizerContainer::Instance()->SetFisherFaceRecognizer(ui->spinBox_fisherNumComponents->value());
+        break;
+    }
+    case 1:
+    {
+        FaceRecognizerContainer::Instance()->SetFisherFaceRecognizer(ui->spinBox_fisherNumComponents->value());
 
-			break;
-		}
-		case 2:
-		{
-			FaceRecognizerContainer::Instance()->SetLBPHFaceRecognizer(
-				ui->spinBox_lbphRadius->value(),
-				ui->spinBox_lbphNeighbors->value(),
-				ui->spinBox_lbphGridX->value(),
-				ui->spinBox_lbphGridY->value());
+        break;
+    }
+    case 2:
+    {
+        FaceRecognizerContainer::Instance()->SetLBPHFaceRecognizer(
+            ui->spinBox_lbphRadius->value(),
+            ui->spinBox_lbphNeighbors->value(),
+            ui->spinBox_lbphGridX->value(),
+            ui->spinBox_lbphGridY->value());
 
-			break;
-		}
-	}
+        break;
+    }
+    }
 }
