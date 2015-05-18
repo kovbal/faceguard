@@ -125,3 +125,6 @@ HEADERS += \
 
 #target.path = $$OUT_PWD/$$DESTDIR
 #INSTALLS += target
+
+# only needed to get the Beautifier plugin working easily
+OTHER_FILES += ../.astylerc
