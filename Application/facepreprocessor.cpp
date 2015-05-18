@@ -38,7 +38,7 @@
 
 #include <QDebug>
 
-static const double PI = std::atan(1.0) * 4;
+static const double PI = std::atan(1.0) * 4.0;
 
 using namespace cv;
 
@@ -104,7 +104,7 @@ double FacePreprocessor::GetRotation(cv::Rect left, cv::Rect right)
 
 std::vector<Rect> FacePreprocessor::GetEyesAlternateMethod()
 {
-    static std::vector<Rect> empty;
+    static const std::vector<Rect> empty;
     std::vector<Rect> eyes;
     eyes.reserve(2);
     classifiers.eyePair->detectMultiScale(result, eyes, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT);
@@ -173,7 +173,7 @@ std::vector<Rect> FacePreprocessor::GetEyes()
         if (markFoundFeatures)
             rectangle(result, eyePairR.front(), 255);
     }
-    for (auto eye : eyes)
+    for (auto& eye : eyes)
     {
         if (!eyePairR.empty())
         {
@@ -211,7 +211,6 @@ std::vector<Rect> FacePreprocessor::GetEyes()
     if (eyes.size() < 2)
     {
 //        qDebug() << "only" << eyes.size() << "eyes were found";
-        eyes.clear();
         return eyes;
     }
     gotEyes = true;
@@ -233,8 +232,8 @@ std::vector<Rect> FacePreprocessor::GetEyes()
         std::sort(helper.begin(), helper.end(), [&eyes](const std::pair<uint16_t, uint16_t>& a,
                   const std::pair<uint16_t, uint16_t>& b)
         {
-            double angleA = std::abs(GetRotation(eyes[a.first], eyes[a.second]));
-            double angleB = std::abs(GetRotation(eyes[b.first], eyes[b.second]));
+            const double angleA = std::abs(GetRotation(eyes[a.first], eyes[a.second]));
+            const double angleB = std::abs(GetRotation(eyes[b.first], eyes[b.second]));
             return angleA < angleB;
         });
 
@@ -266,16 +265,16 @@ void FacePreprocessor::RotateFace()
     if (std::abs(angle) < std::numeric_limits<double>::epsilon() * 3 || std::abs(angle) > MAX_ROTATE_ANGLE)
         return;
 
-    Point2f ptOnFullFrame(face.width / 2.0f + face.x, face.height / 2.0f + face.y);
+    const Point2f ptOnFullFrame(face.width / 2.0f + face.x, face.height / 2.0f + face.y);
     //Mat r = getRotationMatrix2D(ptOnFullFrame, angle, 1.0);
-    RotatedRect rr(ptOnFullFrame, Size2f(face.width, face.height), angle);
+    const RotatedRect rr(ptOnFullFrame, Size2f(face.width, face.height), angle);
     Rect boundingBox = rr.boundingRect();
     // create border
     {
-        int top = -std::min(0, boundingBox.y);
-        int bottom = std::max(0, std::max(0, boundingBox.y) + boundingBox.height - normalized.rows);
-        int left = -std::min(0, boundingBox.x);
-        int right = std::max(0, std::max(0, boundingBox.x) + boundingBox.width - normalized.cols);
+        const int top = -std::min(0, boundingBox.y);
+        const int bottom = std::max(0, std::max(0, boundingBox.y) + boundingBox.height - normalized.rows);
+        const int left = -std::min(0, boundingBox.x);
+        const int right = std::max(0, std::max(0, boundingBox.x) + boundingBox.width - normalized.cols);
 //        qDebug () << top << bottom << left << right;
         copyMakeBorder(normalized, normalized, top, bottom, left, right, BORDER_REPLICATE);
         boundingBox.x += left;
@@ -286,7 +285,7 @@ void FacePreprocessor::RotateFace()
     //warpAffine(normalized, rotated, r, Size(fullSize, fullSize), CV_INTER_LANCZOS4);
     rotated = normalized(boundingBox);
 
-    Mat rotationMatrix = getRotationMatrix2D(Point2f(boundingBox.width / 2.0f, boundingBox.height / 2.0f), angle, 1.0);
+    const Mat rotationMatrix = getRotationMatrix2D(Point2f(boundingBox.width / 2.0f, boundingBox.height / 2.0f), angle, 1.0);
     warpAffine(rotated, rotated, rotationMatrix, boundingBox.size(), CV_INTER_LANCZOS4);
 
     Rect faceTmp = face;
@@ -376,7 +375,6 @@ Mat FacePreprocessor::Preprocess() throw (NoFaceFoundException)
     ScaleFace();
 
     return result;
-
 }
 
 bool FacePreprocessor::GetMarkFoundFeatures() const

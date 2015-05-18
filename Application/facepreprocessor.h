@@ -55,7 +55,7 @@ struct FaceClassifiers
 
 class FacePreprocessor final
 {
-    bool markFoundFeatures;
+    const bool markFoundFeatures;
 
     static const double MAX_ROTATE_ANGLE;
     const cv::Mat& input;
@@ -84,6 +84,8 @@ public:
     cv::Mat Preprocess() throw (NoFaceFoundException);
 
     bool GetMarkFoundFeatures() const;
+
+    // these methods can be run after Preprocess() was called
     double GetAccuracy() const;
     bool IsFaceFound() const;
     bool AreEyesFound() const;
