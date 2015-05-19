@@ -29,6 +29,9 @@
 #ifndef FACERECOGNIZERSELECTORWIDGET_H
 #define FACERECOGNIZERSELECTORWIDGET_H
 
+#include "facerecognizercontainer.h"
+#include <memory>
+
 #include <QDialog>
 
 namespace Ui
@@ -49,6 +52,7 @@ private slots:
     void on_pushButton_clicked();
 
 private:
+    std::shared_ptr<FaceRecognizerContainer> recognizer;
     Ui::FaceRecognizerSelectorWidget* ui;
 };
 

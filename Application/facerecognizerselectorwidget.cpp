@@ -33,6 +33,7 @@
 
 FaceRecognizerSelectorWidget::FaceRecognizerSelectorWidget(QWidget* parent) :
     QDialog(parent),
+    recognizer(FaceRecognizerContainer::Instance()),
     ui(new Ui::FaceRecognizerSelectorWidget)
 {
     ui->setupUi(this);
@@ -61,19 +62,19 @@ void FaceRecognizerSelectorWidget::on_pushButton_clicked()
     {
     case 0:
     {
-        FaceRecognizerContainer::Instance()->SetEigenFaceRecognizer(ui->spinBox_eigenNumComponents->value());
+        recognizer->SetEigenFaceRecognizer(ui->spinBox_eigenNumComponents->value());
 
         break;
     }
     case 1:
     {
-        FaceRecognizerContainer::Instance()->SetFisherFaceRecognizer(ui->spinBox_fisherNumComponents->value());
+        recognizer->SetFisherFaceRecognizer(ui->spinBox_fisherNumComponents->value());
 
         break;
     }
     case 2:
     {
-        FaceRecognizerContainer::Instance()->SetLBPHFaceRecognizer(
+        recognizer->SetLBPHFaceRecognizer(
             ui->spinBox_lbphRadius->value(),
             ui->spinBox_lbphNeighbors->value(),
             ui->spinBox_lbphGridX->value(),
