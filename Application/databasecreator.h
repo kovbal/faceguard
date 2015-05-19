@@ -40,7 +40,7 @@ namespace Ui
 class DatabaseCreator;
 }
 
-class DatabaseCreator : public QDialog
+class DatabaseCreator final : public QDialog
 {
     Q_OBJECT
 

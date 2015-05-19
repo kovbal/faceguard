@@ -82,7 +82,7 @@ void DatabaseCreator::on_pushButton_create_clicked()
 
     if (!directory.isEmpty() && !saveFile.isEmpty())
     {
-        QRegExp fileNameRe("(\\w+_\\w+)_\\d+\\.*");
+        static QRegExp fileNameRe("(\\w+_\\w+)_\\d+\\.*");
 
         QList<QFileInfo> files;
 
