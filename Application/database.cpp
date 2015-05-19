@@ -29,7 +29,12 @@
 #include "database.h"
 
 #include <QFile>
-#include <QTextStream>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QByteArray>
+#include <QDebug>
 
 #include "facerecognizercontainer.h"
 
@@ -40,18 +45,29 @@ const QMap<QString, int>& Database::GetNameLabels() const
 
 void Database::ExportNameLabels(const QString& fileName)
 {
+    QJsonDocument nameLablesDoc;
+    QJsonArray nameLablesJson;
+
+    for (QMapIterator<QString, int> it(nameLabels); it.hasNext();)
+    {
+        it.next();
+        QJsonObject val;
+        val["name"] = it.key();
+        val["label"] = it.value();
+        nameLablesJson.append(val);
+    }
+    nameLablesDoc.setArray(nameLablesJson);
+
+    const QByteArray bytes = nameLablesDoc.toJson();
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly))
     {
-        QTextStream stream(&file);
-
-        QMapIterator<QString, int> it(nameLabels);
-        while (it.hasNext())
-        {
-            it.next();
-
-            stream << it.key() << " " << it.value() << "\n";
-        }
+        file.write(bytes);
+        file.close();
+    }
+    else
+    {
+        qWarning() << "Can't open output file.";
     }
 }
 
@@ -111,20 +127,21 @@ void Database::ImportNameLabels(const QString& fileName)
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly))
     {
-        QTextStream stream(&file);
-
-        QString name;
-        int label;
-
-        while (!stream.atEnd())
+        const QByteArray fullJson = file.readAll();
+        QJsonParseError err;
+        const QJsonDocument doc = QJsonDocument::fromJson(fullJson, &err);
+        if (err.error == QJsonParseError::NoError)
         {
-            stream >> name;
-            stream >> label;
-
-            if (!stream.atEnd())
+            const QJsonArray mainArray = doc.array();
+            for (const QJsonValue& i : mainArray)
             {
-                nameLabels[name] = label;
+                const QJsonObject obj = i.toObject();
+                nameLabels[obj["name"].toString()] = obj["label"].toInt();
             }
+        }
+        else
+        {
+            qWarning() << "Input JSON cannot be parsed.";
         }
     }
 }
