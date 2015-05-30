@@ -45,7 +45,7 @@ const QMap<QString, int>& Database::GetNameLabels() const
 
 void Database::ExportNameLabels(const QString& fileName)
 {
-    QJsonDocument nameLablesDoc;
+	QJsonDocument nameLabelsDoc;
     QJsonArray nameLablesJson;
 
     for (QMapIterator<QString, int> it(nameLabels); it.hasNext();)
@@ -55,10 +55,10 @@ void Database::ExportNameLabels(const QString& fileName)
         val["name"] = it.key();
         val["label"] = it.value();
         nameLablesJson.append(val);
-    }
-    nameLablesDoc.setArray(nameLablesJson);
+	}
+	nameLabelsDoc.setArray(nameLablesJson);
 
-    const QByteArray bytes = nameLablesDoc.toJson();
+	const QByteArray bytes = nameLabelsDoc.toJson();
     QFile file(fileName);
     if (file.open(QIODevice::WriteOnly))
     {

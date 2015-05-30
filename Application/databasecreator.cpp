@@ -70,7 +70,7 @@ void DatabaseCreator::on_pushButton_read_browse_clicked()
 
 void DatabaseCreator::on_pushButton_save_browse_clicked()
 {
-    QString str = QFileDialog::getSaveFileName(this, tr("Save file"), tr(""), tr("Valami (*.facedb)"));
+	QString str = QFileDialog::getSaveFileName(this, tr("Save file"), tr(""), tr("DatabaseName (*.facedb)"));
 
     ui->lineEdit_save->setText(str);
 }
