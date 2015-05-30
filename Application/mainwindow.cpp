@@ -182,7 +182,7 @@ void MainWindow::on_pushButton_createDatabaseFromPlan_clicked()
 {
     if (FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj)
     {
-        QString saveFile = QFileDialog::getSaveFileName(this, tr("Save file"), tr(""), tr("fdb (*.facedb)"));;
+		QString saveFile = QFileDialog::getSaveFileName(this, tr("Save file"), tr(""), tr("DatabaseName (*.facedb)"));;
 
         if (!saveFile.isEmpty())
         {
@@ -210,7 +210,7 @@ void MainWindow::on_actionLoad_database_triggered()
 {
     if (FaceRecognizerContainer::Instance()->CurrentFaceRecognizer().obj)
     {
-        QString loadFile = QFileDialog::getOpenFileName(this, tr("Save file"), tr(""), tr("fdb (*.facedb)"));;
+		QString loadFile = QFileDialog::getOpenFileName(this, tr("Load file"), tr(""), tr("DatabaseName (*.facedb)"));;
 
         if (!loadFile.isEmpty())
         {
