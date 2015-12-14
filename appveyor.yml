@@ -1,0 +1,59 @@
+version: 1.0.{build}-{branch}
+
+# branches to build
+branches:
+  # blacklist
+  except:
+    - gh-pages
+
+environment:
+  OPENCV_PATH: "C:\\projects\\faceguard\\opencv"
+  QT_PATH_64: "C:\\Qt\\5.5\\msvc2013_64\\bin"
+  QT_PATH_32: "C:\\Qt\\5.5\\msvc2013\\bin"
+  OPENCV_BINARY_URL: "http://downloads.sourceforge.net/project/opencvlibrary/opencv-win/2.4.11/opencv-2.4.11.exe"
+  OPENCV_BINARY: "opencv-2.4.11.exe"
+
+# scripts that run after cloning repository
+install:
+  - cmd: if not exist dl\opencv mkdir dl\opencv
+  - ps: if (-not $(Test-Path "dl/opencv/${env:OPENCV_BINARY}")) { Write-Host "Downloading OpenCV"; (new-object System.Net.WebClient).DownloadFile($("${env:OPENCV_BINARY_URL}"), $("C:\projects\faceguard\dl\opencv\${env:OPENCV_BINARY}")); if ($?) { Write-Host "Success!"; } }
+  - ps: if (-not $(Test-Path "${env:OPENCV_PATH}")) { 7z x "C:\projects\faceguard\dl\opencv\${env:OPENCV_BINARY}" > 7z-log.txt }
+
+matrix:
+  fast_finish: true
+
+cache:
+  - C:\projects\faceguard\dl
+  - C:\projects\faceguard\opencv\build\x64\vc12\bin -> appveyor.yml
+  - C:\projects\faceguard\opencv\build\x64\vc12\lib -> appveyor.yml
+  - C:\projects\faceguard\opencv\build\x86\vc12\bin -> appveyor.yml
+  - C:\projects\faceguard\opencv\build\x86\vc12\lib -> appveyor.yml
+  - C:\projects\faceguard\opencv\build\include -> appveyor.yml
+  - C:\projects\faceguard\opencv\build\share -> appveyor.yml
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform:
+  - x64
+  - x86
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+# scripts to run before build
+before_build:
+  - cmd: "IF %PLATFORM% == x86 set QT_PATH=%QT_PATH_32%"
+  - cmd: "IF %PLATFORM% == x64 set QT_PATH=%QT_PATH_64%"
+  - cmd: cd Application
+  - cmd: "%QT_PATH%\\qmake.exe -tp vc -r OPENCV_PATH=%OPENCV_PATH% OPENCV_VERSION=2411 Application.pro"
+
+build:
+  project: C:\projects\faceguard\Application\faceguard.vcxproj
+  parallel: false
+
+after_build:
+  - cmd: "cd %APPVEYOR_BUILD_FOLDER%"
+  - cmd: "7z a -r -mx=9 %APPVEYOR_PROJECT_SLUG%-%APPVEYOR_BUILD_VERSION%-%PLATFORM%.zip Application\\bin"
